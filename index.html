@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disha Bharti College of Management & Education</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Set theme on initial load to prevent a "flash of unstyled content" (FOUC).
+        // This script is placed in the <head> to run before the body renders.
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header id="main-header" class="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-graduation-cap text-3xl text-blue-600"></i>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Disha Bharti College</h1>
+                </div>
+                <nav id="desktop-nav" class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link active-link">Home</a>
+                    <a href="#about" class="nav-link">About Us</a>
+                    <a href="#faculty" class="nav-link">Our Faculty</a>
+                    <a href="#academics" class="nav-link">Courses</a>
+                    <a href="#news" class="nav-link">News & Events</a>
+                    <a href="#gallery" class="nav-link">Gallery</a>
+                    <a href="#admissions" class="nav-link">Admissions</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="student.html" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">Student Section</a>
+                </nav>
+                <div class="flex items-center">
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" class="md:hidden text-2xl" aria-label="Open mobile menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Home</a>
+            <a href="#about" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">About Us</a>
+            <a href="#faculty" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Our Faculty</a>
+            <a href="#academics" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Courses</a>
+            <a href="#news" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">News & Events</a>
+            <a href="#gallery" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Gallery</a>
+            <a href="#admissions" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Admissions</a>
+            <a href="#contact" class="block py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600">Contact</a>
+            <a href="student.html" class="block py-2 text-blue-600 dark:text-blue-400 font-semibold">Student Section</a>
+        </div>
+    </header>
+
+    <main id="main-content">
+
+        <!-- Home Page Section -->
+        <section id="home" class="page">
+            <!-- Hero Section -->
+            <div class="hero-section text-white h-[60vh] flex items-center justify-center">
+                <div class="text-center px-4">
+                    <h2 class="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Your Future Starts Here</h2>
+                    <p class="text-xl md:text-2xl max-w-3xl mx-auto drop-shadow-md">Empowering the next generation of leaders in Management, Technology, and Education.</p>
+                    <a href="#admissions" class="mt-8 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">Discover Your Path</a>
+                </div>
+            </div>
+
+            <!-- Welcome Section -->
+            <div class="container mx-auto px-6 py-20">
+                <div class="text-center mb-16">
+                    <h3 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Welcome to Disha Bharti College</h3>
+                    <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">Your career journey begins here.</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg text-center card-hover-effect fade-in-up">
+                        <i class="fas fa-book-open text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-2xl font-semibold mb-2 dark:text-white">Industry-Ready Curriculum</h4>
+                        <p class="text-gray-600 dark:text-gray-400">Our courses are designed in collaboration with industry experts to make you job-ready.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg text-center card-hover-effect fade-in-up" >
+                        <i class="fas fa-users text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-2xl font-semibold mb-2 dark:text-white">Expert Faculty</h4>
+                        <p class="text-gray-600 dark:text-gray-400">Learn from distinguished scholars and professionals dedicated to your success.</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg text-center card-hover-effect fade-in-up" >
+                        <i class="fas fa-briefcase text-5xl text-blue-600 mb-4"></i>
+                        <h4 class="text-2xl font-semibold mb-2 dark:text-white">Strong Placements</h4>
+                        <p class="text-gray-600 dark:text-gray-400">We have a dedicated placement cell with a strong track record of placing students in top companies.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student Testimonials Section -->
+            <div class="bg-gray-100 dark:bg-gray-800 py-20">
+                <div class="container mx-auto px-6">
+                    <h3 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12 fade-in-up">What Our Students Say</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-lg card-hover-effect fade-in-up flex flex-col items-center">
+                            <img src="https://images.unsplash.com/photo-1557555187-23d685287bc3?q=80&w=1887&auto=format&fit=crop" alt="Student 1" class="w-20 h-20 rounded-full mb-4 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/334155?text=Student';">
+                            <p class="text-gray-600 dark:text-gray-300 italic mb-4 text-center">"The faculty at Disha Bharti is incredibly supportive. The placement cell helped me secure a great job right after my BBA."</p>
+                            <h4 class="font-semibold dark:text-white">Priya Sharma</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">BBA, Batch of 2024</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-lg card-hover-effect fade-in-up flex flex-col items-center" >
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop" alt="Student 2" class="w-20 h-20 rounded-full mb-4 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/334155?text=Student';">
+                            <p class="text-gray-600 dark:text-gray-300 italic mb-4 text-center">"The practical approach to learning in the BCA program was fantastic. The modern computer labs are a huge plus."</p>
+                            <h4 class="font-semibold dark:text-white">Amit Kumar</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">BCA, Batch of 2023</p>
+                        </div>
+                        <div class="bg-white dark:bg-gray-700 p-8 rounded-lg shadow-lg card-hover-effect fade-in-up flex flex-col items-center" >
+                            <img src="https://images.unsplash.com/photo-1599658880122-ba28e2a39f36?q=80&w=1887&auto=format&fit=crop" alt="Student 3" class="w-20 h-20 rounded-full mb-4 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/80x80/e2e8f0/334155?text=Student';">
+                            <p class="text-gray-600 dark:text-gray-300 italic mb-4 text-center">"My MBA experience was transformative. The guest lectures and industry visits provided invaluable insights."</p>
+                            <h4 class="font-semibold dark:text-white">Rahul Verma</h4>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">MBA, Batch of 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image Carousel -->
+            <div class="bg-white dark:bg-gray-900 py-20">
+                <div class="container mx-auto px-6">
+                    <h3 class="text-4xl font-bold text-center text-gray-800 dark:text-white mb-12 fade-in-up">Glimpses of Campus Life</h3>
+                    <div class="carousel-container max-w-4xl mx-auto rounded-lg shadow-2xl h-96 fade-in-up">
+                        <div class="carousel-slide active">
+                            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop" alt="Graduation Day" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/e2e8f0/334155?text=Event';">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop" alt="Students in a workshop" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/e2e8f0/334155?text=Workshop';">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2069&auto=format&fit=crop" alt="College festival" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/e2e8f0/334155?text=Festival';">
+                        </div>
+                        <div class="carousel-dots"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us Page Section -->
+        <section id="about" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">About Our College</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">A legacy of academic excellence and professional development.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in-up">
+                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1932&auto=format&fit=crop" alt="College Building" class="rounded-lg shadow-xl" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/334155?text=Campus';">
+                </div>
+                <div class="fade-in-up" >
+                    <h3 class="text-3xl font-semibold text-gray-800 dark:text-white mb-4">Our Mission</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">To empower students with knowledge, skills, and values to become successful professionals and responsible citizens. We are committed to providing quality education and fostering an environment of innovation and research.</p>
+                    <h3 class="text-3xl font-semibold text-gray-800 dark:text-white mb-4">Our Vision</h3>
+                    <p class="text-gray-600 dark:text-gray-400 leading-relaxed">To be a leading center for professional education, recognized for our academic excellence, industry-institute collaboration, and contribution to society.</p>
+                </div>
+            </div>
+             <div class="mt-20">
+                <h3 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12 fade-in-up">Meet Our Leadership</h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center card-hover-effect fade-in-up">
+                        <img src="/fac/Chairman-yashpal-bhatiya.jpg" alt="Chairperson" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Leader';">
+                        <h4 class="text-xl font-semibold dark:text-white">Mr. Yashpal Bhatia</h4>
+                        <p class="text-gray-500 dark:text-gray-400">Chairperson</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center card-hover-effect fade-in-up" >
+                        <img src="/fac/director-gaurav-agarwal.jpg" alt="Director" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Leader';">
+                        <h4 class="text-xl font-semibold dark:text-white">Mr. Gourav Aggarwal</h4>
+                        <p class="text-gray-500 dark:text-gray-400">Director</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center card-hover-effect fade-in-up" >
+                        <img src="/fac/Dr.Kashi-Ram-principal.jpg" alt="principal" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Leader';">
+                        <h4 class="text-xl font-semibold dark:text-white">Dr. Kashi Ram Sharma</h4>
+                        <p class="text-gray-500 dark:text-gray-400">Principal</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Faculty Page Section -->
+        <section id="faculty" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Our Faculty</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">Meet our dedicated and experienced educators.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up">
+                    <img src="/fac/DANNY-SAXENA-faculty-detail.jpg" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Dr. Danny Saxena</h4>
+                    <p class="text-blue-600 font-medium">HOD, Education</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">M.A (Pol. Sc., His.) M.Ed., Ph.D.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Ranjana-rani.jpg" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Ranjana Rani</h4>
+                    <p class="text-blue-600 font-medium">HOD, Commerce</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">M.Com, Ph.D</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/sheetal-walia.jpg" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Sheetal Walia</h4>
+                    <p class="text-blue-600 font-medium">HOD, Assistant Professor, IT</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">MCA, PGDCA, MA(Education), B.Sc.</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/ankur-sir.jpg" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Ankur Sharma</h4>
+                    <p class="text-blue-600 font-medium">HOD, Assistant Professor, BBA</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">UGC-NET, MBA, Pursuing Ph.D</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Ms.-Deepali.bmp" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Deepali Gupta</h4>
+                    <p class="text-blue-600 font-medium">HOD, IT</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">MCA, APGDCIM, PGDHRM, Pursuing Ph.D</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Mr.-Rajesh.bmp" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Rajesh Saxena</h4>
+                    <p class="text-blue-600 font-medium">Assistant Professor, IT</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">MCA, M.Sc., B.Ed </p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Ms.-Shweta.jpg" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Shweta Mittal</h4>
+                    <p class="text-blue-600 font-medium">Assistant Professor, IT</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">MCA, B.Com</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Ms.-Shaifali.bmp" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Shaifali Atray</h4>
+                    <p class="text-blue-600 font-medium">Assistant Professor, Managment</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">PGDBM, M.Com</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg text-center p-6 card-hover-effect fade-in-up" >
+                    <img src="/fac/Ms.-Nehal.bmp" alt="Faculty Member" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-200 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/334155?text=Faculty';">
+                    <h4 class="text-xl font-semibold dark:text-white">Prof. Nehal Jain</h4>
+                    <p class="text-blue-600 font-medium">HOD, Assistant Professor, MBA</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">PGDBA, M.Com, B.Com</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academics Page Section -->
+        <section id="academics" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Our Courses</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">A wide range of programs to shape your career.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up">
+                    <img src="/course/BBA.avif" alt="BBA" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Bachelor of Business Admin. (BBA)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Build a strong foundation in business management, finance, marketing, and leadership.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="/course/BCA.avif" alt="BCA" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Bachelor of Computer App. (BCA)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Dive into the world of programming, databases, networking, and software development.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="/course/MBA.avif" alt="MBA" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Master of Business Admin. (MBA)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Advance your career with our postgraduate program specializing in various domains of management.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up">
+                    <img src="/course/college-students-b-com.jpg" alt="B.Com" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Bachelor of Commerce (B.Com)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Gain expertise in accounting, finance, economics, and commercial law.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="/course/B.ED.avif" alt="B.Ed" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Bachelor of Education (B.Ed)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Prepare for a rewarding career in teaching with our comprehensive teacher training program.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="/course/BA.avif" alt="BA" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Course';">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 dark:text-white">Bachelor of Arts (B.A.)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Explore diverse subjects in humanities and social sciences for a broad-based education.</p>
+                        <a href="#admissions" class="text-blue-600 font-semibold hover:underline">Learn More &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News & Events Page Section -->
+        <section id="news" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">News & Events</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">Stay updated with the latest happenings at Disha Bharti College.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop" alt="Seminar" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Event';">
+                    <div class="p-6">
+                        <p class="text-sm text-blue-600 font-semibold mb-2">EVENT • AUG 15, 2025</p>
+                        <h3 class="text-xl font-semibold mb-2 dark:text-white">Annual Tech Symposium "Innovate 2025"</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">Join us for a day of innovation, guest speakers, and workshops on the latest technology trends.</p>
+                        <a href="#news" class="text-blue-600 font-semibold hover:underline text-sm">Read More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" alt="Workshop" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Event';">
+                    <div class="p-6">
+                        <p class="text-sm text-blue-600 font-semibold mb-2">NEWS • AUG 10, 2025</p>
+                        <h3 class="text-xl font-semibold mb-2 dark:text-white">Placement Drive Success with TCS & Infosys</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">Our recent placement drive saw over 50 students placed in top IT companies. Congratulations to all!</p>
+                        <a href="#news" class="text-blue-600 font-semibold hover:underline text-sm">Read More &rarr;</a>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden card-hover-effect fade-in-up" >
+                    <img src="https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?q=80&w=2070&auto=format&fit=crop" alt="Sports" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/334155?text=Event';">
+                    <div class="p-6">
+                        <p class="text-sm text-blue-600 font-semibold mb-2">EVENT • JUL 28, 2025</p>
+                        <h3 class="text-xl font-semibold mb-2 dark:text-white">Inter-College Sports Meet "Victory 2025"</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 text-sm">Our teams showcased exceptional talent, winning the overall championship trophy. Go team Disha!</p>
+                        <a href="#news" class="text-blue-600 font-semibold hover:underline text-sm">Read More &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Page Section -->
+        <section id="gallery" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Photo Gallery</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">A glimpse into our vibrant campus life.</p>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid gap-4">
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x400/e2e8f0/e2e8f0" data-src="Gallery\unnamed-8-scaled-qedwepqtvs3vzoyqy5fn9ptg1lgmo87rz0sgerbyx4.jpg" alt="Gallery image of students studying together"></div>
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x400/e2e8f0/e2e8f0" data-src="Gallery\ind3-qedweqoo2m56baxdsnu9u7kwmzbzvxbib5fxw1akqw.jpg" alt="Gallery image of students in graduation gowns"></div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x600/e2e8f0/e2e8f0" data-src="Gallery\WhatsApp-Image-2023-07-04-at-11.34.48-AM-2.jpeg" alt="Gallery image of graduation day"></div>
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x400/e2e8f0/e2e8f0" data-src="Gallery\20220604_135416-1366x1536.jpg" alt="Gallery image of students collaborating"></div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x600/e2e8f0/e2e8f0" data-src="Gallery\ind1-qedwepqtvs3vzoyqy5fn9ptg1lgmo87rz0sgerbyx4.jpeg" alt="Gallery image of a classroom lecture"></div>
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x600/e2e8f0/e2e8f0" data-src="Gallery\20220405_15932pmByGPSMapCamera-1536x1220.jpg" alt="Gallery image of a library"></div>
+                </div>
+                 <div class="grid gap-4">
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x400/e2e8f0/e2e8f0" data-src="Gallery\DSC07406-qedwepqsnxbgdot0j8kh5mz309900h02387a9cuqw0.jpg" alt="Gallery image of a workshop"></div>
+                    <div class="fade-in-up"><img class="lazy h-auto max-w-full rounded-lg shadow-md" src="https://placehold.co/400x600/e2e8f0/e2e8f0" data-src="Gallery\IMG_20221001_112423-scaled-qedweosyh3a622udoq5ul57mevdmsrwbr3jss2w528.jpg" alt="Gallery image of a college festival"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admissions Page Section -->
+        <section id="admissions" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Admissions 2025-26</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">Join our community of future leaders.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="fade-in-up">
+                    <h3 class="text-3xl font-semibold mb-6 dark:text-white">Admission Process</h3>
+                    <ol class="list-decimal list-inside space-y-4 text-gray-600 dark:text-gray-400">
+                        <li>
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Online Registration:</span> Fill out the online application form from our website.
+                        </li>
+                        <li>
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Merit/Entrance Based:</span> Admission is based on merit in qualifying exams or scores from relevant entrance tests.
+                        </li>
+                        <li>
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Document Verification:</span> Submit the required documents for verification at the college campus.
+                        </li>
+                        <li>
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">Fee Payment:</span> Complete the admission by paying the fees to confirm your seat.
+                        </li>
+                    </ol>
+                    <h3 class="text-3xl font-semibold mt-10 mb-6 dark:text-white">Important Dates</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
+                        <li>Application Opens: <span class="font-semibold">June 1, 2025</span></li>
+                        <li>Application Deadline: <span class="font-semibold">August 15, 2025</span></li>
+                        <li>New Session Begins: <span class="font-semibold">September 1, 2025</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl fade-in-up" >
+                    <h3 class="text-2xl font-semibold mb-6 text-center dark:text-white">Admission Inquiry</h3>
+                    <form id="info-form">
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Full Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="query" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Your Query</label>
+                            <textarea id="query" name="query" rows="4" placeholder="e.g., Inquiry about BBA program" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105">Submit Inquiry</button>
+                    </form>
+                    <div id="form-feedback" class="mt-4 text-center"></div>
+                </div>
+            </div>
+            <!-- FAQ Section -->
+            <div class="mt-20 fade-in-up">
+                <h3 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">Frequently Asked Questions</h3>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div class="faq-item bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <button class="faq-question w-full text-left p-4 font-semibold flex justify-between items-center">
+                            <span>What is the eligibility criteria for the BBA program?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </button>
+                        <div class="faq-answer hidden p-4 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                            Candidates must have passed 10+2 (or equivalent) with a minimum of 45% marks from a recognized board.
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <button class="faq-question w-full text-left p-4 font-semibold flex justify-between items-center">
+                            <span>Are there any scholarships available?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </button>
+                        <div class="faq-answer hidden p-4 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                            Yes, we offer merit-based scholarships and financial aid for students from economically weaker sections. Please visit the admissions office for more details.
+                        </div>
+                    </div>
+                    <div class="faq-item bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <button class="faq-question w-full text-left p-4 font-semibold flex justify-between items-center">
+                            <span>Does the college provide hostel facilities?</span>
+                            <i class="fas fa-chevron-down transition-transform"></i>
+                        </button>
+                        <div class="faq-answer hidden p-4 border-t border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                            The college has separate, secure hostel facilities for boys and girls with all modern amenities.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page Section -->
+        <section id="contact" class="page hidden container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white fade-in-up">Get In Touch</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-2 fade-in-up">We'd love to hear from you. Reach out with any questions.</p>
+            </div>
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl grid md:grid-cols-2 gap-8 fade-in-up">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 dark:text-white">Contact Information</h3>
+                    <div class="space-y-4 text-gray-700 dark:text-gray-300">
+                        <p class="flex items-start">
+                            <i class="fas fa-map-marker-alt w-6 text-blue-600 mt-1"></i>
+                            <span>Chidbana Lane, Delhi Road, Saharanpur - 247001, Uttar Pradesh, India</span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="fas fa-phone w-6 text-blue-600"></i>
+                            <span>+91 88991 92200 </span>
+                        </p>
+                        <p class="flex items-center">
+                            <i class="fas fa-envelope w-6 text-blue-600"></i>
+                            <span>info@dishabharticollege.edu.in </span>
+                        </p>
+                    </div>
+                    <div class="mt-8">
+                        <!-- Embedded Google Map -->
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.633143522194!2d77.51019687554277!3d29.96155597492817!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390e9526a6424597%3A0x8450e13783a38a95!2sDisha%20Bharti%20College%20of%20Management%20and%20Education!5e0!3m2!1sen!2sin!4v1724203277579!5m2!1sen!2sin"
+                            width="100%" height="250" allowfullscreen="" loading="lazy" class="rounded-lg map-iframe" title="Disha Bharti College Location"></iframe>
+                    </div>
+                </div>
+                 <div>
+                    <h3 class="text-2xl font-semibold mb-6 dark:text-white">Send us a Message</h3>
+                    <form id="contact-form">
+                        <div class="mb-4">
+                            <label for="contact-name" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Name</label>
+                            <input type="text" id="contact-name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="contact-email" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
+                            <input type="email" id="contact-email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div class="mb-6">
+                            <label for="contact-message" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Message</label>
+                            <textarea id="contact-message" rows="5" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105">Send Message</button>
+                    </form>
+                    <div id="contact-feedback" class="mt-4 text-center"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Disha Bharti College</h4>
+                    <p class="text-gray-400">A premier institution for professional education and development.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#admissions" class="text-gray-400 hover:text-white transition-colors">Admissions</a></li>
+                        <li><a href="#academics" class="text-gray-400 hover:text-white transition-colors">Courses</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <p class="text-gray-400">Delhi Road, Saharanpur, UP</p>
+                    <p class="text-gray-400">Email: info@dishabharticollege.edu.in</p>
+                    <p class="text-gray-400">Phone: +91 88991 92200</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/Dishabharticollege" class="text-gray-400 hover:text-white text-2xl transition-transform transform hover:scale-110"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl transition-transform transform hover:scale-110"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl transition-transform transform hover:scale-110"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/dishabharticollegesaharanpur/" class="text-gray-400 hover:text-white text-2xl transition-transform transform hover:scale-110"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Disha Bharti College of Management & Education. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+    <a href="#home" id="back-to-top" class="bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
