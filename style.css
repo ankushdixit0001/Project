@@ -48,7 +48,7 @@ body {
 
 /* Hero Section Background */
 .hero-section {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('course/Header-college-background.avif') no-repeat center center/cover;
 }
 
 /* Image Carousel */
