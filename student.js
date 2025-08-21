@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // A more detailed database to simulate a real backend.
     const studentsDB = {
         'user1': {
-            name: 'Priya Sharma', email: 'priya.sharma@example.com', password: 'password123', studentId: '100001',
-            results: { 'Semester 1': 'A', 'Semester 2': 'A+' },
+            name: 'Ankush Dixit', email: 'ankushdixit@example.com', password: 'password123', studentId: '100001',
+            results: { 'Semester 1': 'A+', 'Semester 2': 'A+' },
             fees: { total: 50000, paid: 50000, due: 0 },
-            registration: { status: 'Completed', courses: ['BBA101', 'BBA102'] },
+            registration: { status: 'Pending', courses: ['BCA101', 'BCA102'] },
             library: { issued: ['The Lean Startup'], fines: 0 },
         },
         'user2': {
