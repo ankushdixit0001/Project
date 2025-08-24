@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Disha Bharti College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .sidebar-link.active { background-color: #2563eb; color: white; }
+        .sidebar-link { color: #d1d5db; }
+        .modal, #toast { transition: opacity 0.3s ease, transform 0.3s ease; }
+        .toast-enter { opacity: 0; transform: translateY(-20px); }
+        .toast-leave { opacity: 0; transform: translateY(-20px); }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 glass-effect p-4 rounded-lg z-50 opacity-0 transform -translate-y-5 toast-enter">
+        <div class="flex items-center">
+            <i id="toast-icon" data-lucide="check-circle" class="w-6 h-6 text-green-400 mr-3"></i>
+            <span id="toast-message">Operation successful!</span>
+        </div>
+    </div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0">
+            <div class="p-6 flex items-center space-x-3 border-b border-gray-800">
+                <svg class="h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><path d="M12 5v17"/></svg>
+                <h1 class="text-lg font-bold">Admin Panel</h1>
+            </div>
+            <nav id="sidebar-nav" class="flex-1 p-4 space-y-2">
+                <a href="#" id="nav-dashboard" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg active"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard</a>
+                <a href="#" id="nav-students" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="users" class="w-5 h-5 mr-3"></i> Student Management</a>
+                <a href="#" id="nav-courses" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="book-open" class="w-5 h-5 mr-3"></i> Course Management</a>
+                <a href="#" id="nav-faculty" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="user-check" class="w-5 h-5 mr-3"></i> Faculty Records</a>
+                <a href="#" id="nav-fees" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="credit-card" class="w-5 h-5 mr-3"></i> Fee Management</a>
+                <a href="#" id="nav-reports" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="trending-up" class="w-5 h-5 mr-3"></i> Reports & Analytics</a>
+                <a href="#" id="nav-settings" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="settings" class="w-5 h-5 mr-3"></i> Settings</a>
+            </nav>
+            <div class="p-4 border-t border-gray-800">
+                <a href="login.html" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-800">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-8 overflow-y-auto"></main>
+    </div>
+
+    <!-- Modals -->
+    <div id="formModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50"><div id="formModalContent" class="glass-effect rounded-xl p-8 w-full max-w-md"></div></div>
+    <div id="detailsModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50"><div id="detailsModalContent" class="glass-effect rounded-xl p-8 w-full max-w-3xl"></div></div>
+    <div id="confirmModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50"><div class="glass-effect rounded-xl p-8 w-full max-w-sm text-center"><i data-lucide="alert-triangle" class="w-16 h-16 text-yellow-400 mx-auto mb-4"></i><h3 id="confirmTitle" class="text-2xl font-bold mb-2">Are you sure?</h3><p id="confirmMessage" class="text-gray-300 mb-6">This action cannot be undone.</p><div class="flex justify-center space-x-4"><button id="cancelDelete" class="px-6 py-2 rounded-lg bg-gray-600 hover:bg-gray-500">Cancel</button><button id="confirmDelete" class="px-6 py-2 rounded-lg bg-red-600 hover:bg-red-500">Delete</button></div></div></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('main-content');
+            const navLinks = document.querySelectorAll('.sidebar-link');
+            const formModal = document.getElementById('formModal');
+            const formModalContent = document.getElementById('formModalContent');
+            const detailsModal = document.getElementById('detailsModal');
+            const detailsModalContent = document.getElementById('detailsModalContent');
+            const confirmModal = document.getElementById('confirmModal');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            let studentsData = [
+                { id: 'DBC250824', name: 'Priya Singh', course: 'B.Tech CSE', date: '2025-08-24', email: 'priya.s@example.com', phone: '+91 9876543210', dob: '2004-05-15', address: '123 Civil Lines, Saharanpur', gpa: 8.7, attendance: 92, totalFees: 75000, amountPaid: 60000, enrolledCourses: ['CS101', 'BCA301'] },
+                { id: 'DBC250823', name: 'Rahul Verma', course: 'BBA', date: '2025-08-23', email: 'rahul.v@example.com', phone: '+91 9876543211', dob: '2003-11-22', address: '456 Mission Compound, Saharanpur', gpa: 7.9, attendance: 85, totalFees: 60000, amountPaid: 30000, enrolledCourses: ['BBA202'] },
+                { id: 'DBC250822', name: 'Anjali Gupta', course: 'BCA', date: '2025-08-22', email: 'anjali.g@example.com', phone: '+91 9876543212', dob: '2004-02-10', address: '789 Court Road, Saharanpur', gpa: 9.1, attendance: 96, totalFees: 55000, amountPaid: 55000, enrolledCourses: ['BCA301', 'CS101'] },
+                { id: 'DBC250821', name: 'Amit Kumar', course: 'B.Tech CSE', date: '2025-08-21', email: 'amit.k@example.com', phone: '+91 9876543213', dob: '2003-09-01', address: '101 Nehru Market, Saharanpur', gpa: 8.2, attendance: 88, totalFees: 75000, amountPaid: 40000, enrolledCourses: ['CS101'] },
+            ];
+            let coursesData = [
+                { id: 'CS101', title: 'Intro to Programming', faculty: 'Dr. A. Sharma', students: 120, capacity: 150, syllabus: ['Variables & Data Types', 'Control Flow', 'Functions', 'Basic Data Structures'] },
+                { id: 'BBA202', title: 'Marketing Principles', faculty: 'Prof. R. Kumar', students: 85, capacity: 100, syllabus: ['The Marketing Mix', 'Consumer Behavior', 'Market Research', 'Digital Marketing'] },
+                { id: 'BCA301', title: 'Database Management', faculty: 'Dr. S. Verma', students: 95, capacity: 100, syllabus: ['Relational Model', 'SQL Queries', 'Normalization', 'Transaction Management'] },
+            ];
+            let facultyData = [ { id: 'FAC001', name: 'Dr. Anjali Sharma', department: 'Computer Science', email: 'asharma@dishabharti.ac.in' }, { id: 'FAC002', name: 'Prof. Rajesh Kumar', department: 'Business Admin', email: 'rkumar@dishabharti.ac.in' }, { id: 'FAC003', name: 'Dr. S. Verma', department: 'Computer Applications', email: 'sverma@dishabharti.ac.in' }, ];
+            const notificationsData = [ { text: 'New student registration: Priya Singh.', time: '5 mins ago' }, { text: 'Course CS101 is now full.', time: '2 hours ago' } ];
+            let activityLog = [ { text: 'Fee payment of ₹ 15,000 recorded for Priya Singh.', time: '10 mins ago' }, { text: 'New course "Advanced Physics" added.', time: '1 hour ago' } ];
+
+            const showToast = (message) => {
+                toastMessage.textContent = message;
+                toast.classList.remove('opacity-0', '-translate-y-5', 'toast-enter');
+                toast.classList.add('toast-leave');
+                setTimeout(() => {
+                    toast.classList.remove('toast-leave');
+                    toast.classList.add('opacity-0', '-translate-y-5', 'toast-enter');
+                }, 3000);
+            };
+
+            const renderDashboard = () => `
+                <header class="flex justify-between items-center mb-8">
+                    <div><h2 class="text-3xl font-bold">Admin Dashboard</h2><p class="text-gray-400">College-wide overview and management tools.</p></div>
+                    <div class="flex items-center space-x-4 relative">
+                        <button id="notification-btn" class="p-2 rounded-full hover:bg-gray-800 relative"><i data-lucide="bell" class="w-6 h-6 text-gray-300"></i><span class="absolute top-1 right-1.5 h-2 w-2 rounded-full bg-red-500"></span></button>
+                        <div id="notification-dropdown" class="hidden absolute top-12 right-0 w-72 glass-effect rounded-xl p-4 text-sm z-10"><h4 class="font-semibold mb-2">Notifications</h4><div class="space-y-2">${notificationsData.map(n => `<div class="p-2 bg-gray-800 rounded-lg"><div>${n.text}</div><div class="text-xs text-gray-400 mt-1">${n.time}</div></div>`).join('')}</div></div>
+                        <img src="https://placehold.co/40x40/1f2937/9ca3af?text=AD" class="w-10 h-10 rounded-full border-2 border-blue-500">
+                    </div>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="glass-effect rounded-xl p-6"><h4 class="text-sm font-medium text-gray-400">Total Students</h4><p class="text-3xl font-bold mt-2">${studentsData.length}</p></div>
+                    <div class="glass-effect rounded-xl p-6"><h4 class="text-sm font-medium text-gray-400">Active Faculty</h4><p class="text-3xl font-bold mt-2">${facultyData.length}</p></div>
+                    <div class="glass-effect rounded-xl p-6"><h4 class="text-sm font-medium text-gray-400">Courses Offered</h4><p class="text-3xl font-bold mt-2">${coursesData.length}</p></div>
+                    <div class="glass-effect rounded-xl p-6"><h4 class="text-sm font-medium text-gray-400">Quick Actions</h4><div class="grid grid-cols-3 gap-2 mt-3">${[{'l':'Student','i':'user-plus','m':'addStudent'},{'l':'Course','i':'book-plus','m':'addCourse'},{'l':'Faculty','i':'user-check','m':'addFaculty'}].map(a => `<button data-modal="${a.m}" class="action-btn bg-gray-800 hover:bg-gray-700 p-3 rounded-lg flex flex-col items-center"><i data-lucide="${a.i}" class="w-5 h-5"></i><span class="text-xs mt-1">${a.l}</span></button>`).join('')}</div></div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Recent Student Registrations</h3>${renderStudentsTable(studentsData.slice(0, 3))}</div>
+                    <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Recent Activities</h3><div class="space-y-3">${activityLog.map(a => `<div class="flex items-start"><i data-lucide="history" class="w-4 h-4 mr-3 mt-1 text-gray-500"></i><div><p class="text-sm">${a.text}</p><p class="text-xs text-gray-400">${a.time}</p></div></div>`).join('')}</div></div>
+                </div>`;
+
+            const renderStudentsTable = (students) => `<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th class="px-6 py-3 rounded-l-lg">Student ID</th><th>Name</th><th>Course</th><th>Email</th><th class="px-6 py-3 rounded-r-lg text-right">Actions</th></tr></thead><tbody>${students.map((s, i) => `
+                <tr class="border-b border-gray-800">
+                    <td class="px-6 py-4">${s.id}</td>
+                    <td class="px-6 py-4 font-medium"><button data-action="view-student" data-index="${i}" class="action-btn hover:underline text-blue-400">${s.name}</button></td>
+                    <td class="px-6 py-4">${s.course}</td>
+                    <td class="px-6 py-4">${s.email}</td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <button data-modal="editStudent" data-index="${i}" class="action-btn text-blue-400 hover:text-blue-300 p-2 rounded-md"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                        <button data-type="student" data-index="${i}" class="action-btn text-red-400 hover:text-red-300 p-2 rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                </tr>`).join('')}</tbody></table></div>`;
+            
+            const renderStudentManagement = () => `<div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">Student Management</h2><button data-modal="addStudent" class="action-btn flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add New Student</button></div><div class="glass-effect rounded-xl p-6">${renderStudentsTable(studentsData)}</div>`;
+
+            const renderStudentProfile = (studentIndex) => {
+                const student = studentsData[studentIndex];
+                const balanceDue = student.totalFees - student.amountPaid;
+                const enrolledCourses = student.enrolledCourses.map(courseId => coursesData.find(c => c.id === courseId)?.title || 'Unknown Course').join(', ');
+                return `<div class="flex justify-between items-start mb-6"><div><h3 class="text-3xl font-bold">${student.name}</h3><p class="text-blue-400">${student.id} | ${student.course}</p></div><button class="action-btn p-1 rounded-full hover:bg-gray-700" data-action="close-modal"><i data-lucide="x" class="w-6 h-6"></i></button></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-6 text-sm"><div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-effect rounded-xl p-4 space-y-3"><h4 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-2">Personal Information</h4><div class="flex"><strong class="w-24 text-gray-400">Email</strong><span>${student.email}</span></div><div class="flex"><strong class="w-24 text-gray-400">Phone</strong><span>${student.phone}</span></div><div class="flex"><strong class="w-24 text-gray-400">D.O.B.</strong><span>${student.dob}</span></div></div><div class="glass-effect rounded-xl p-4 space-y-3"><h4 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-2">Academic Status</h4><div class="flex"><strong class="w-24 text-gray-400">GPA</strong><span class="font-bold text-green-400">${student.gpa.toFixed(1)}</span></div><div class="flex"><strong class="w-24 text-gray-400">Attendance</strong><span class="font-bold text-blue-400">${student.attendance}%</span></div><div class="flex"><strong class="w-24 text-gray-400">Courses</strong><span>${enrolledCourses}</span></div></div></div><div class="glass-effect rounded-xl p-4"><h4 class="text-lg font-semibold border-b border-gray-700 pb-2 mb-2">Fee Status</h4><div class="space-y-2 mt-3"><div class="flex justify-between"><span>Total Fees:</span><strong>₹ ${student.totalFees.toLocaleString()}</strong></div><div class="flex justify-between"><span>Paid:</span><strong>- ₹ ${student.amountPaid.toLocaleString()}</strong></div><div class="flex justify-between font-bold text-base border-t border-gray-700 pt-2 mt-2"><span>Balance:</span><span class="text-yellow-400">₹ ${balanceDue.toLocaleString()}</span></div></div><div class="flex space-x-2 mt-4"><button data-modal="recordPayment" data-index="${studentIndex}" class="action-btn w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-2 rounded-lg text-xs">Record Payment</button><button data-action="sendReminder" data-student-name="${student.name}" class="action-btn w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-2 rounded-lg text-xs">Send Reminder</button></div></div></div>`;
+            };
+            
+            const renderCoursesTable = (courses) => `<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th class="px-6 py-3 rounded-l-lg">Course ID</th><th>Title</th><th>Faculty</th><th>Enrollment</th><th class="px-6 py-3 rounded-r-lg text-right">Actions</th></tr></thead><tbody>${courses.map((c, i) => `
+                <tr class="border-b border-gray-800"><td class="px-6 py-4">${c.id}</td><td class="px-6 py-4 font-medium"><button data-action="view-course" data-index="${i}" class="action-btn hover:underline text-blue-400">${c.title}</button></td><td class="px-6 py-4">${c.faculty}</td><td class="px-6 py-4">${c.students} / ${c.capacity}</td><td class="px-6 py-4 text-right space-x-2"><button data-modal="editCourse" data-index="${i}" class="action-btn text-blue-400 hover:text-blue-300 p-2 rounded-md"><i data-lucide="edit" class="w-4 h-4"></i></button><button data-type="course" data-index="${i}" class="action-btn text-red-400 hover:text-red-300 p-2 rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`).join('')}</tbody></table></div>`;
+            
+            const renderCourseManagement = () => `<div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">Course Management</h2><button data-modal="addCourse" class="action-btn flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add New Course</button></div><div class="glass-effect rounded-xl p-6">${renderCoursesTable(coursesData)}</div>`;
+            
+            const renderCourseDetails = (courseIndex) => {
+                const course = coursesData[courseIndex];
+                const enrolledStudents = studentsData.filter(s => s.enrolledCourses.includes(course.id));
+                return `<div class="flex justify-between items-start mb-6"><div><h3 class="text-2xl font-bold">${course.title}</h3><p class="text-blue-400">${course.id}</p></div><button data-action="close-modal" class="action-btn p-1 rounded-full hover:bg-gray-700"><i data-lucide="x" class="w-6 h-6"></i></button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm"><div class="glass-effect rounded-xl p-4"><h4 class="font-semibold border-b border-gray-700 pb-2 mb-2">Syllabus</h4><ul class="list-disc list-inside space-y-1 mt-2">${course.syllabus.map(s => `<li>${s}</li>`).join('')}</ul></div><div class="glass-effect rounded-xl p-4"><h4 class="font-semibold border-b border-gray-700 pb-2 mb-2">Enrolled Students (${enrolledStudents.length}/${course.capacity})</h4><ul class="space-y-2 mt-2 overflow-y-auto max-h-48">${enrolledStudents.map(s => `<li class="flex justify-between items-center text-xs"><span>${s.name}</span><span class="text-gray-400">${s.id}</span></li>`).join('')}</ul></div></div>`;
+            };
+
+            const renderFacultyTable = (faculty) => `<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th class="px-6 py-3 rounded-l-lg">Faculty ID</th><th>Name</th><th>Department</th><th>Email</th><th class="px-6 py-3 rounded-r-lg text-right">Actions</th></tr></thead><tbody>${faculty.map((f, i) => `<tr class="border-b border-gray-800"><td class="px-6 py-4">${f.id}</td><td class="px-6 py-4 font-medium">${f.name}</td><td class="px-6 py-4">${f.department}</td><td class="px-6 py-4">${f.email}</td><td class="px-6 py-4 text-right space-x-2"><button data-modal="editFaculty" data-index="${i}" class="action-btn text-blue-400 hover:text-blue-300 p-2 rounded-md"><i data-lucide="edit" class="w-4 h-4"></i></button><button data-type="faculty" data-index="${i}" class="action-btn text-red-400 hover:text-red-300 p-2 rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td></tr>`).join('')}</tbody></table></div>`;
+            
+            const renderFacultyManagement = () => `<div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">Faculty Records</h2><button data-modal="addFaculty" class="action-btn flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add New Faculty</button></div><div class="glass-effect rounded-xl p-6">${renderFacultyTable(facultyData)}</div>`;
+            
+            const renderFeeManagement = () => {
+                let feeData = studentsData.map((s, i) => ({...s, originalIndex: i, balance: s.totalFees - s.amountPaid }));
+                const tableHtml = (data) => `<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th class="px-6 py-3 rounded-l-lg">Student Name</th><th>Course</th><th>Balance Due</th><th>Status</th><th class="px-6 py-3 rounded-r-lg text-center">Actions</th></tr></thead><tbody>${data.map(s => `<tr class="border-b border-gray-800"><td class="px-6 py-4 font-medium">${s.name}</td><td class="px-6 py-4">${s.course}</td><td class="px-6 py-4 font-bold ${s.balance > 0 ? 'text-yellow-400' : 'text-green-400'}">₹ ${s.balance.toLocaleString()}</td><td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${s.balance > 0 ? 'bg-red-500/50 text-red-300' : 'bg-green-500/50 text-green-300'}">${s.balance > 0 ? 'Pending' : 'Paid'}</span></td><td class="px-6 py-4 text-center"><button data-modal="recordPayment" data-index="${s.originalIndex}" class="action-btn bg-blue-600 hover:bg-blue-500 text-white font-bold py-1 px-3 rounded-lg text-xs">Record Payment</button></td></tr>`).join('')}</tbody></table></div>`;
+                
+                setTimeout(() => {
+                    const searchInput = document.getElementById('feeSearch');
+                    const statusFilter = document.getElementById('feeStatusFilter');
+                    const tableContainer = document.getElementById('feeTableContainer');
+                    const updateTable = () => {
+                        const searchTerm = searchInput.value.toLowerCase();
+                        const status = statusFilter.value;
+                        const filteredData = feeData.filter(s => {
+                            const nameMatch = s.name.toLowerCase().includes(searchTerm);
+                            const statusMatch = status === 'all' || (status === 'pending' && s.balance > 0) || (status === 'paid' && s.balance <= 0);
+                            return nameMatch && statusMatch;
+                        });
+                        tableContainer.innerHTML = tableHtml(filteredData);
+                        lucide.createIcons();
+                    };
+                    searchInput.addEventListener('input', updateTable);
+                    statusFilter.addEventListener('change', updateTable);
+                    document.getElementById('exportCsvBtn').addEventListener('click', () => {
+                        const headers = ['Student ID', 'Name', 'Course', 'Total Fees', 'Amount Paid', 'Balance Due'];
+                        const rows = feeData.map(s => [s.id, s.name, s.course, s.totalFees, s.amountPaid, s.balance]);
+                        const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+                        const encodedUri = encodeURI(csvContent);
+                        const link = document.createElement("a");
+                        link.setAttribute("href", encodedUri);
+                        link.setAttribute("download", "fee_report.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        showToast('Fee report exported!');
+                    });
+                }, 0);
+
+                return `<div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">Fee Management</h2><button id="exportCsvBtn" class="action-btn flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500"><i data-lucide="download" class="w-4 h-4 mr-2"></i> Export as CSV</button></div><div class="glass-effect rounded-xl p-6"><div class="flex justify-between items-center mb-4"><div class="relative"><i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i><input id="feeSearch" type="text" placeholder="Search student..." class="bg-gray-800 rounded-lg py-2 pl-10 pr-4 text-sm"></div><select id="feeStatusFilter" class="bg-gray-800 rounded-lg py-2 px-3 text-sm"><option value="all">All Statuses</option><option value="pending">Pending</option><option value="paid">Paid</option></select></div><div id="feeTableContainer">${tableHtml(feeData)}</div></div>`;
+            };
+
+            const renderReports = () => {
+                setTimeout(() => {
+                    const feeCtx = document.getElementById('feeChart').getContext('2d');
+                    const totalPaid = studentsData.reduce((acc, s) => acc + s.amountPaid, 0);
+                    const totalDue = studentsData.reduce((acc, s) => acc + (s.totalFees - s.amountPaid), 0);
+                    new Chart(feeCtx, { type: 'doughnut', data: { labels: ['Fees Collected', 'Fees Outstanding'], datasets: [{ data: [totalPaid, totalDue], backgroundColor: ['#2563eb', '#ca8a04'], borderColor: '#1f2937', borderWidth: 4 }] }, options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#d1d5db' } } } } });
+
+                    const enrollCtx = document.getElementById('enrollmentChart').getContext('2d');
+                    new Chart(enrollCtx, { type: 'bar', data: { labels: coursesData.map(c => c.title), datasets: [{ label: 'Enrolled Students', data: coursesData.map(c => c.students), backgroundColor: '#10b981' }] }, options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { color: '#9ca3af' } }, x: { ticks: { color: '#9ca3af' } } }, plugins: { legend: { display: false } } } });
+                }, 0);
+                return `<h2 class="text-3xl font-bold mb-6">Reports & Analytics</h2><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Fee Collection Status</h3><canvas id="feeChart"></canvas></div><div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Enrollment by Course</h3><canvas id="enrollmentChart"></canvas></div></div>`;
+            };
+
+            const renderSettings = () => `<h2 class="text-3xl font-bold mb-6">Settings</h2><div class="glass-effect rounded-xl p-8 space-y-6"><div class="flex justify-between items-center"><div><h3 class="font-semibold">Academic Year</h3><p class="text-sm text-gray-400">Set the current academic session start and end dates.</p></div><button class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm">Manage Dates</button></div><div class="flex justify-between items-center border-t border-gray-700 pt-6"><div><h3 class="font-semibold">Notification Preferences</h3><p class="text-sm text-gray-400">Control which email notifications are sent automatically.</p></div><button class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm">Configure</button></div></div>`;
+
+            const modalTemplates = {
+                addStudent: { title: 'Add New Student', form: `<form id="modalForm" data-type="addStudent" class="space-y-4"><div><label>Full Name</label><input type="text" id="studentName" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Course</label><select id="studentCourse" required class="mt-1 block w-full rounded-md bg-gray-800"><option>B.Tech CSE</option><option>BBA</option><option>BCA</option></select></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Add Student</button></div></form>` },
+                editStudent: { title: 'Edit Student', form: (i) => `<form id="modalForm" data-type="editStudent" class="space-y-4"><input type="hidden" id="studentIndex" value="${i}"><div><label>Full Name</label><input type="text" id="studentName" required value="${studentsData[i].name}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Email</label><input type="email" id="studentEmail" required value="${studentsData[i].email}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="save" class="w-5 h-5 mr-2"></i> Save Changes</button></div></form>` },
+                addCourse: { title: 'Add New Course', form: `<form id="modalForm" data-type="addCourse" class="space-y-4"><div><label>Title</label><input type="text" id="courseTitle" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Faculty</label><select id="courseFaculty" required class="mt-1 block w-full rounded-md bg-gray-800">${facultyData.map(f => `<option value="${f.name}">${f.name}</option>`).join('')}</select></div><div><label>Capacity</label><input type="number" id="courseCapacity" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="plus" class="w-5 h-5 mr-2"></i> Add Course</button></div></form>` },
+                editCourse: { title: 'Edit Course', form: (i) => `<form id="modalForm" data-type="editCourse" class="space-y-4"><input type="hidden" id="courseIndex" value="${i}"><div><label>Title</label><input type="text" id="courseTitle" required value="${coursesData[i].title}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Capacity</label><input type="number" id="courseCapacity" required value="${coursesData[i].capacity}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="save" class="w-5 h-5 mr-2"></i> Save Changes</button></div></form>` },
+                addFaculty: { title: 'Add New Faculty', form: `<form id="modalForm" data-type="addFaculty" class="space-y-4"><div><label>Full Name</label><input type="text" id="facultyName" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Department</label><input type="text" id="facultyDept" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Email</label><input type="email" id="facultyEmail" required class="mt-1 block w-full rounded-md bg-gray-800"></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Add Faculty</button></div></form>` },
+                editFaculty: { title: 'Edit Faculty', form: (i) => `<form id="modalForm" data-type="editFaculty" class="space-y-4"><input type="hidden" id="facultyIndex" value="${i}"><div><label>Full Name</label><input type="text" id="facultyName" required value="${facultyData[i].name}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div><label>Email</label><input type="email" id="facultyEmail" required value="${facultyData[i].email}" class="mt-1 block w-full rounded-md bg-gray-800"></div><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="save" class="w-5 h-5 mr-2"></i> Save Changes</button></div></form>` },
+                recordPayment: { title: 'Record Payment', form: (i) => `<form id="modalForm" data-type="recordPayment" class="space-y-4"><div><label>Amount Received</label><input type="number" id="paymentAmount" required class="mt-1 block w-full rounded-md bg-gray-800"></div><input type="hidden" id="studentIndex" value="${i}"><div class="pt-4"><button type="submit" class="w-full flex justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white hover:bg-blue-500"><i data-lucide="save" class="w-5 h-5 mr-2"></i> Save Payment</button></div></form>` }
+            };
+            
+            const routes = {
+                'nav-dashboard': renderDashboard, 'nav-students': renderStudentManagement,
+                'nav-courses': renderCourseManagement, 'nav-faculty': renderFacultyManagement,
+                'nav-fees': renderFeeManagement, 'nav-reports': renderReports, 'nav-settings': renderSettings,
+            };
+            const navigate = (id) => { mainContent.innerHTML = routes[id](); lucide.createIcons(); navLinks.forEach(link => { link.classList.toggle('active', link.id === id); }); };
+            
+            mainContent.addEventListener('click', (e) => {
+                const button = e.target.closest('.action-btn');
+                if (!button) return;
+                const { action, type, modal, index } = button.dataset;
+
+                if (modal) {
+                    const template = modalTemplates[modal];
+                    const formHtml = typeof template.form === 'function' ? template.form(index) : template.form;
+                    formModalContent.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold">${template.title}</h3><button data-action="close-modal" class="action-btn p-1 rounded-full hover:bg-gray-700"><i data-lucide="x" class="w-6 h-6"></i></button></div>${formHtml}`;
+                    formModal.classList.remove('hidden');
+                    lucide.createIcons();
+                } else if (type) {
+                    confirmModal.dataset.type = type;
+                    confirmModal.dataset.index = index;
+                    confirmModal.classList.remove('hidden');
+                } else if (action === 'view-student') {
+                    detailsModalContent.innerHTML = renderStudentProfile(index);
+                    detailsModal.classList.remove('hidden');
+                    lucide.createIcons();
+                } else if (action === 'view-course') {
+                    detailsModalContent.innerHTML = renderCourseDetails(index);
+                    detailsModal.classList.remove('hidden');
+                    lucide.createIcons();
+                }
+            });
+            
+            detailsModal.addEventListener('click', (e) => {
+                const button = e.target.closest('.action-btn');
+                if (!button) {
+                    if (e.target === detailsModal || e.target.closest('[data-action="close-modal"]')) detailsModal.classList.add('hidden');
+                    return;
+                };
+                if (button.dataset.modal === 'recordPayment') {
+                    const template = modalTemplates.recordPayment;
+                    const formHtml = template.form(button.dataset.index);
+                    formModalContent.innerHTML = `<div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold">${template.title} for ${studentsData[button.dataset.index].name}</h3><button data-action="close-modal" class="action-btn p-1 rounded-full hover:bg-gray-700"><i data-lucide="x" class="w-6 h-6"></i></button></div>${formHtml}`;
+                    formModal.classList.remove('hidden');
+                    lucide.createIcons();
+                }
+                if (button.dataset.action === 'sendReminder') {
+                    showToast(`Fee reminder sent to ${button.dataset.studentName}!`);
+                }
+            });
+
+            formModalContent.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const type = form.dataset.type;
+                
+                if (type === 'recordPayment') {
+                    const amount = parseInt(form.paymentAmount.value, 10);
+                    const index = form.studentIndex.value;
+                    if (amount > 0 && studentsData[index]) {
+                        studentsData[index].amountPaid += amount;
+                        showToast('Payment recorded successfully!');
+                        if (!detailsModal.classList.contains('hidden')) {
+                            detailsModalContent.innerHTML = renderStudentProfile(index);
+                        }
+                        if (document.getElementById('feeTableContainer')) {
+                            navigate('nav-fees');
+                        }
+                        lucide.createIcons();
+                    }
+                } else if (type === 'addStudent') {
+                    studentsData.unshift({ id: `DBC${Date.now().toString().slice(-5)}`, name: form.studentName.value, course: form.studentCourse.value, date: new Date().toISOString().slice(0, 10), email: 'new@example.com', phone: 'N/A', dob: 'N/A', address: 'N/A', gpa: 0, attendance: 100, totalFees: 65000, amountPaid: 0, enrolledCourses: [] });
+                    showToast('Student added successfully!');
+                    navigate('nav-students');
+                } else if (type === 'editStudent') {
+                    const index = form.studentIndex.value;
+                    studentsData[index].name = form.studentName.value;
+                    studentsData[index].email = form.studentEmail.value;
+                    showToast('Student details updated!');
+                    navigate('nav-students');
+                } else if (type === 'addCourse') {
+                    coursesData.unshift({ id: form.courseTitle.value.slice(0,3).toUpperCase() + Date.now().toString().slice(-3), title: form.courseTitle.value, faculty: form.courseFaculty.value, students: 0, capacity: form.courseCapacity.value, syllabus: ['New Syllabus Item 1'] });
+                    showToast('Course added successfully!');
+                    navigate('nav-courses');
+                } else if (type === 'editCourse') {
+                    const index = form.courseIndex.value;
+                    coursesData[index].title = form.courseTitle.value;
+                    coursesData[index].capacity = form.courseCapacity.value;
+                    showToast('Course details updated!');
+                    navigate('nav-courses');
+                } else if (type === 'addFaculty') {
+                    facultyData.unshift({ id: `FAC${Date.now().toString().slice(-3)}`, name: form.facultyName.value, department: form.facultyDept.value, email: form.facultyEmail.value });
+                    showToast('Faculty added successfully!');
+                    navigate('nav-faculty');
+                } else if (type === 'editFaculty') {
+                    const index = form.facultyIndex.value;
+                    facultyData[index].name = form.facultyName.value;
+                    facultyData[index].email = form.facultyEmail.value;
+                    showToast('Faculty details updated!');
+                    navigate('nav-faculty');
+                }
+                formModal.classList.add('hidden');
+            });
+
+            [formModal, confirmModal].forEach(modal => { modal.addEventListener('click', (e) => { if (e.target === modal || e.target.closest('[data-action="close-modal"]')) { modal.classList.add('hidden'); } }); });
+            document.getElementById('cancelDelete').addEventListener('click', () => confirmModal.classList.add('hidden'));
+            document.getElementById('confirmDelete').addEventListener('click', () => {
+                const { type, index } = confirmModal.dataset;
+                if (type === 'student') studentsData.splice(index, 1);
+                else if (type === 'course') coursesData.splice(index, 1);
+                else if (type === 'faculty') facultyData.splice(index, 1);
+                confirmModal.classList.add('hidden');
+                showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.`);
+                navigate(`nav-${type}s`);
+            });
+            
+            document.getElementById('sidebar-nav').addEventListener('click', (e) => { const link = e.target.closest('.sidebar-link'); if (link && routes[link.id]) { e.preventDefault(); navigate(link.id); } });
+            
+            navigate('nav-dashboard');
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "students": [
+    { "id": "DBC250824", "name": "Priya Singh", "course": "B.Tech CSE", "date": "2025-08-24", "email": "priya.s@example.com", "phone": "+91 9876543210", "dob": "2004-05-15", "address": "123 Civil Lines, Saharanpur", "gpa": 8.7, "attendance": 92, "totalFees": 75000, "amountPaid": 60000 },
+    { "id": "DBC250823", "name": "Rahul Verma", "course": "BBA", "date": "2025-08-23", "email": "rahul.v@example.com", "phone": "+91 9876543211", "dob": "2003-11-22", "address": "456 Mission Compound, Saharanpur", "gpa": 7.9, "attendance": 85, "totalFees": 60000, "amountPaid": 30000 },
+    { "id": "DBC250822", "name": "Anjali Gupta", "course": "BCA", "date": "2025-08-22", "email": "anjali.g@example.com", "phone": "+91 9876543212", "dob": "2004-02-10", "address": "789 Court Road, Saharanpur", "gpa": 9.1, "attendance": 96, "totalFees": 55000, "amountPaid": 55000 }
+  ],
+  "courses": [
+    { "id": "CS101", "title": "Intro to Programming", "faculty": "Dr. A. Sharma", "students": 120, "capacity": 150 },
+    { "id": "BBA202", "title": "Marketing Principles", "faculty": "Prof. R. Kumar", "students": 85, "capacity": 100 }
+  ],
+  "faculty": [
+    { "id": "FAC001", "name": "Dr. Anjali Sharma", "department": "Computer Science", "email": "asharma@dishabharti.ac.in" },
+    { "id": "FAC002", "name": "Prof. Rajesh Kumar", "department": "Business Admin", "email": "rkumar@dishabharti.ac.in" }
+  ]
+}

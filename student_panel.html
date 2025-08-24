@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Disha Bharti College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .sidebar-link.active { background-color: #2563eb; color: white; }
+        .sidebar-link { color: #d1d5db; }
+        .calendar-day { min-height: 6rem; }
+        .event-dot { width: 6px; height: 6px; }
+        .modal { transition: opacity 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0">
+            <div class="p-6 flex items-center space-x-3 border-b border-gray-800">
+                <svg class="h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><path d="M12 5v17"/></svg>
+                <h1 class="text-lg font-bold">Disha Bharti College</h1>
+            </div>
+            <nav id="sidebar-nav" class="flex-1 p-4 space-y-2">
+                <a href="#" id="nav-dashboard" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg active"><i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard</a>
+                <a href="#" id="nav-courses" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="book-marked" class="w-5 h-5 mr-3"></i> My Courses</a>
+                <a href="#" id="nav-grades" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="graduation-cap" class="w-5 h-5 mr-3"></i> Grades</a>
+                <a href="#" id="nav-financials" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="dollar-sign" class="w-5 h-5 mr-3"></i> Financials</a>
+                <a href="#" id="nav-calendar" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="calendar-days" class="w-5 h-5 mr-3"></i> Calendar & Events</a>
+                <a href="#" id="nav-library" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="library" class="w-5 h-5 mr-3"></i> Digital Library</a>
+                <a href="#" id="nav-profile" class="sidebar-link flex items-center px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-gray-800"><i data-lucide="user-circle" class="w-5 h-5 mr-3"></i> My Profile</a>
+            </nav>
+            <div class="p-4 border-t border-gray-800">
+                <a href="login.html" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-800">
+                    <i data-lucide="log-out" class="w-5 h-5 mr-3"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-1 p-8 overflow-y-auto"></main>
+    </div>
+
+    <!-- Course Details Modal -->
+    <div id="detailsModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
+        <div id="detailsModalContent" class="glass-effect rounded-xl p-8 w-full max-w-2xl">
+            <!-- Modal content will be injected here -->
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainContent = document.getElementById('main-content');
+            const navLinks = document.querySelectorAll('.sidebar-link');
+            const detailsModal = document.getElementById('detailsModal');
+            const detailsModalContent = document.getElementById('detailsModalContent');
+            
+            // --- MOCK DATA ---
+            const studentData = { name: "Priya Sharma", id: "DBC230567", avatarText: "PS", email: "priya.s@example.com", phone: "+91 9876543210", dob: "2004-05-15", address: "123 Civil Lines, Saharanpur" };
+            const coursesData = [
+                { id: 'CS-301', title: 'Data Structures & Algorithms', prof: 'Prof. Anjali Sharma', credits: 4, progress: 75, syllabus: ['Intro to Complexity', 'Arrays & Lists', 'Stacks & Queues', 'Trees & Graphs'], grades: [{name:'Quiz 1', score: '8/10'}, {name:'Mid-Term', score: '42/50'}, {name:'Assignment 1', score:'18/20'}] },
+                { id: 'MA-205', title: 'Advanced Calculus', prof: 'Prof. Rajesh Kumar', credits: 3, progress: 60, syllabus: ['Limits & Continuity', 'Derivatives', 'Integrals'], grades: [{name:'Quiz 1', score: '9/10'}, {name:'Mid-Term', score: '35/50'}] },
+                { id: 'PHY-210', title: 'Quantum Physics', prof: 'Dr. S. Verma', credits: 4, progress: 85, syllabus: ['Wave-Particle Duality', 'Schrödinger Equation'], grades: [{name:'Lab Report', score: '20/20'}, {name:'Mid-Term', score: '45/50'}] },
+                { id: 'HU-101', title: 'Professional Communication', prof: 'Dr. Meenakshi Gupta', credits: 2, progress: 95, syllabus: ['Verbal & Non-Verbal', 'Presentation Skills'], grades: [{name:'Presentation', score: '25/25'}] },
+            ];
+            const scheduleData = [ {time: '10:00 AM', course: 'Data Structures', room: 'C-101'}, {time: '01:00 PM', course: 'Advanced Calculus', room: 'M-203'} ];
+            const notificationsData = [ { text: 'New grade posted for CS-202.', time: '2 hours ago' }, { text: 'Fee payment due in 5 days.', time: '1 day ago' } ];
+            const gradesData = [
+                { course: 'CS-202 Mid-Term', grade: 'A-', type: 'exam' },
+                { course: 'MA-201 Quiz 3', grade: 'B+', type: 'quiz' },
+                { course: 'PHY-110 Lab Report', grade: 'A', type: 'assignment' },
+                { course: 'HU-101 Presentation', grade: 'A+', type: 'assignment' },
+            ];
+            const financialsData = {
+                totalFees: 75000, scholarship: 20000, paid: 40000, dueDate: 'Sep 15, 2025',
+                transactions: [
+                    { date: 'Aug 01, 2025', desc: 'Fall Semester Tuition', amount: '+ ₹ 75,000.00', type: 'debit' },
+                    { date: 'Aug 05, 2025', desc: 'Merit Scholarship', amount: '- ₹ 20,000.00', type: 'credit' },
+                    { date: 'Aug 10, 2025', desc: 'Online Payment', amount: '- ₹ 40,000.00', type: 'credit' },
+                ]
+            };
+            const calendarEvents = [
+                { day: 24, title: 'Guest Lecture: AI', color: 'blue' },
+                { day: 30, title: 'Project Submission', color: 'red' },
+                { day: 15, title: 'Fee Payment Due', color: 'yellow', nextMonth: true }
+            ];
+            const libraryData = [
+                { title: 'The Algorithm Design Manual', author: 'Steven S. Skiena', type: 'E-Book' },
+                { title: 'Journal of Computer Science', author: 'Vol. 18, Issue 4', type: 'Journal' },
+                { title: 'Advanced Engineering Mathematics', author: 'Erwin Kreyszig', type: 'E-Book' },
+            ];
+
+            // --- RENDER FUNCTIONS ---
+            const renderDashboard = () => `
+                <header class="flex justify-between items-center mb-8">
+                    <div><h2 class="text-3xl font-bold">Welcome, ${studentData.name}!</h2><p class="text-gray-400">Here's your academic snapshot for today, August 24, 2025.</p></div>
+                    <div class="flex items-center space-x-4 relative">
+                        <button id="notification-btn" class="p-2 rounded-full hover:bg-gray-800 relative"><i data-lucide="bell" class="w-6 h-6 text-gray-300"></i><span class="absolute top-1 right-1.5 h-2 w-2 rounded-full bg-red-500"></span></button>
+                        <div id="notification-dropdown" class="hidden absolute top-12 right-0 w-72 glass-effect rounded-xl p-4 text-sm z-10"><h4 class="font-semibold mb-2">Notifications</h4><div class="space-y-2">${notificationsData.map(n => `<div class="p-2 bg-gray-800 rounded-lg"><div>${n.text}</div><div class="text-xs text-gray-400 mt-1">${n.time}</div></div>`).join('')}</div></div>
+                        <img src="https://placehold.co/40x40/1f2937/9ca3af?text=${studentData.avatarText}" class="w-10 h-10 rounded-full border-2 border-blue-500">
+                    </div>
+                </header>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Today's Schedule</h3><div class="space-y-3">${scheduleData.map(s => `<div class="flex items-center"><span class="font-bold text-blue-400 w-24">${s.time}</span><div><p class="font-medium">${s.course}</p><p class="text-sm text-gray-400">Room: ${s.room}</p></div></div>`).join('')}</div></div>
+                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">My Current Courses</h3><div class="space-y-4">${coursesData.slice(0, 2).map(c => `<div class="p-4 bg-gray-800 rounded-lg flex justify-between items-center"><div><p class="font-semibold">${c.id}: ${c.title}</p><p class="text-sm text-gray-400">${c.prof}</p></div><button data-action="view-course" data-course-id="${c.id}" class="action-btn text-sm text-blue-400 hover:underline">View Details</button></div>`).join('')}</div></div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Recent Grades</h3><ul class="space-y-3">${gradesData.slice(0,3).map(g => `<li class="flex justify-between items-center"><span>${g.course}</span> <span class="font-bold text-green-400 text-lg">${g.grade}</span></li>`).join('')}</ul></div>
+                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Quick Links</h3><div class="grid grid-cols-2 gap-3 mt-4">${[{l:'Pay Fees',i:'dollar-sign',n:'nav-financials'},{l:'My Grades',i:'graduation-cap',n:'nav-grades'},{l:'My Profile',i:'user-circle',n:'nav-profile'},{l:'Library',i:'library',n:'nav-library'}].map(link => `<a href="#" data-nav="${link.n}" class="nav-link bg-gray-800 hover:bg-gray-700 p-3 rounded-lg flex flex-col items-center justify-center text-center"><i data-lucide="${link.i}" class="w-6 h-6 mb-2"></i><span class="text-xs font-medium">${link.l}</span></a>`).join('')}</div></div>
+                    </div>
+                </div>`;
+            
+            const renderCourses = () => `
+                <h2 class="text-3xl font-bold mb-6">My Courses</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">${coursesData.map(c => `<div class="glass-effect rounded-xl p-6"><div class="flex justify-between items-start"><div><p class="text-sm text-blue-400 font-medium">${c.id}</p><h3 class="text-xl font-semibold mt-1">${c.title}</h3><p class="text-sm text-gray-400 mt-1">${c.prof}</p></div><div class="text-sm font-bold">${c.credits} Credits</div></div><div class="mt-4"><div class="flex justify-between text-sm text-gray-400 mb-1"><span>Progress</span><span>${c.progress}%</span></div><div class="w-full bg-gray-700 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full" style="width: ${c.progress}%"></div></div></div><div class="mt-4"><button data-action="view-course" data-course-id="${c.id}" class="action-btn w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg text-sm">View Details</button></div></div>`).join('')}</div>`;
+            
+            const renderCourseDetails = (courseId) => {
+                const course = coursesData.find(c => c.id === courseId);
+                return `<div class="flex justify-between items-start mb-6"><div><h3 class="text-2xl font-bold">${course.title}</h3><p class="text-blue-400">${course.id}</p></div><button data-action="close-modal" class="action-btn p-1 rounded-full hover:bg-gray-700"><i data-lucide="x" class="w-6 h-6"></i></button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm"><div class="glass-effect rounded-xl p-4"><h4 class="font-semibold border-b border-gray-700 pb-2 mb-2">Syllabus</h4><ul class="list-disc list-inside space-y-1 mt-2">${course.syllabus.map(s => `<li>${s}</li>`).join('')}</ul></div><div class="glass-effect rounded-xl p-4"><h4 class="font-semibold border-b border-gray-700 pb-2 mb-2">Grade Breakdown</h4><ul class="space-y-2 mt-2">${course.grades.map(g => `<li class="flex justify-between"><span>${g.name}:</span><span class="font-semibold">${g.score}</span></li>`).join('')}</ul></div></div>`;
+            };
+
+            const renderGrades = () => `
+                <h2 class="text-3xl font-bold mb-6">Grades & Performance</h2>
+                <div class="glass-effect rounded-xl p-6"><div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th scope="col" class="px-6 py-3 rounded-l-lg">Course / Assessment</th><th scope="col" class="px-6 py-3">Type</th><th scope="col" class="px-6 py-3 rounded-r-lg text-right">Grade</th></tr></thead><tbody>${gradesData.map(grade => `<tr class="border-b border-gray-800"><td class="px-6 py-4 font-medium">${grade.course}</td><td class="px-6 py-4 capitalize">${grade.type}</td><td class="px-6 py-4 text-right font-bold text-lg text-green-400">${grade.grade}</td></tr>`).join('')}</tbody></table></div></div>`;
+
+            const renderFinancials = () => {
+                const balanceDue = financialsData.totalFees - financialsData.scholarship - financialsData.paid;
+                return `
+                    <h2 class="text-3xl font-bold mb-6">Financials</h2>
+                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1 space-y-6">
+                            <div class="glass-effect rounded-xl p-6">
+                                <h3 class="text-xl font-semibold mb-4">Fee Status</h3>
+                                <div class="space-y-3 text-sm">
+                                    <div class="flex justify-between"><span>Total Fees:</span> <strong>₹ ${financialsData.totalFees.toLocaleString()}</strong></div>
+                                    <div class="flex justify-between"><span>Scholarship:</span> <strong class="text-green-400">- ₹ ${financialsData.scholarship.toLocaleString()}</strong></div>
+                                    <div class="flex justify-between border-t border-gray-700 pt-2"><span>Net Payable:</span> <strong>₹ ${(financialsData.totalFees - financialsData.scholarship).toLocaleString()}</strong></div>
+                                    <div class="flex justify-between"><span>Amount Paid:</span> <strong>- ₹ ${financialsData.paid.toLocaleString()}</strong></div>
+                                    <div class="flex justify-between text-base font-bold border-t border-gray-700 pt-3 mt-3"><span>Balance Due:</span> <span class="text-yellow-400">₹ ${balanceDue.toLocaleString()}</span></div>
+                                </div>
+                                <p class="text-xs text-center text-gray-400 mt-4">Due by ${financialsData.dueDate}</p>
+                                <button class="mt-4 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Pay Now</button>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-2 glass-effect rounded-xl p-6">
+                            <h3 class="text-xl font-semibold mb-4">Transaction History</h3>
+                            <ul class="space-y-3">${financialsData.transactions.map(t => `<li class="flex justify-between items-center p-3 bg-gray-800 rounded-lg"><div><p class="font-medium">${t.desc}</p><p class="text-sm text-gray-400">${t.date}</p></div><p class="font-semibold ${t.type === 'credit' ? 'text-green-400' : 'text-red-400'}">${t.amount}</p></li>`).join('')}</ul>
+                        </div>
+                    </div>`;
+            };
+
+            const renderCalendar = () => {
+                const today = new Date('2025-08-24');
+                const month = today.getMonth();
+                const year = today.getFullYear();
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                let calendarHtml = `<h2 class="text-3xl font-bold mb-6">Calendar & Events - August 2025</h2><div class="glass-effect rounded-xl p-4"><div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-gray-400 mb-2">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<div>${d}</div>`).join('')}</div><div class="grid grid-cols-7 gap-2">`;
+                for (let i = 0; i < firstDay; i++) calendarHtml += `<div></div>`;
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const isToday = day === today.getDate() ? 'bg-blue-600 text-white' : 'bg-gray-800';
+                    const eventsOnDay = calendarEvents.filter(e => e.day === day && !e.nextMonth);
+                    calendarHtml += `<div class="calendar-day rounded-lg p-2 ${isToday}"><div class="font-semibold">${day}</div><div class="mt-1 space-y-1">${eventsOnDay.map(e => `<div class="flex items-center text-xs"><div class="event-dot bg-${e.color}-400 rounded-full mr-1.5"></div>${e.title}</div>`).join('')}</div></div>`;
+                }
+                calendarHtml += `</div></div>`;
+                return calendarHtml;
+            };
+
+            const renderLibrary = () => `
+                <h2 class="text-3xl font-bold mb-6">Digital Library</h2>
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="relative mb-6"><i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i><input type="text" placeholder="Search for e-books, journals, research papers..." class="w-full bg-gray-800 rounded-lg py-3 pl-12 pr-4 ring-1 ring-gray-700 focus:ring-blue-500"></div>
+                    <div class="space-y-4">${libraryData.map(item => `<div class="p-4 bg-gray-800 rounded-lg flex justify-between items-center"><div><p class="font-semibold">${item.title}</p><p class="text-sm text-gray-400">${item.author}</p></div><span class="text-xs font-medium bg-blue-500/50 text-blue-300 px-2 py-1 rounded-full">${item.type}</span></div>`).join('')}</div>
+                </div>`;
+
+            const renderProfile = () => `
+                <h2 class="text-3xl font-bold mb-6">My Profile</h2>
+                <div class="glass-effect rounded-xl p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center md:border-r border-gray-700 md:pr-8"><img src="https://placehold.co/128x128/1f2937/9ca3af?text=${studentData.avatarText}" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500"><h3 class="text-2xl font-bold">${studentData.name}</h3><p class="text-gray-400">${studentData.id}</p></div>
+                    <div class="md:col-span-2 space-y-4 text-lg">
+                        <div class="flex items-center"><i data-lucide="mail" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.email}</span></div>
+                        <div class="flex items-center"><i data-lucide="phone" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.phone}</span></div>
+                        <div class="flex items-center"><i data-lucide="cake" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.dob}</span></div>
+                        <div class="flex items-center"><i data-lucide="home" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.address}</span></div>
+                    </div>
+                </div>`;
+
+            const routes = {
+                'nav-dashboard': renderDashboard, 'nav-courses': renderCourses,
+                'nav-grades': renderGrades, 'nav-financials': renderFinancials,
+                'nav-calendar': renderCalendar, 'nav-library': renderLibrary,
+                'nav-profile': renderProfile,
+            };
+            const navigate = (id) => { mainContent.innerHTML = routes[id](); lucide.createIcons(); navLinks.forEach(link => { link.classList.toggle('active', link.id === id); }); };
+            
+            mainContent.addEventListener('click', (e) => {
+                const link = e.target.closest('.nav-link');
+                const button = e.target.closest('.action-btn');
+                if (link && routes[link.dataset.nav]) { e.preventDefault(); navigate(link.dataset.nav); }
+                if (button && button.dataset.action === 'view-course') {
+                    detailsModalContent.innerHTML = renderCourseDetails(button.dataset.courseId);
+                    detailsModal.classList.remove('hidden');
+                    lucide.createIcons();
+                }
+                if (e.target.id === 'notification-btn' || e.target.closest('#notification-btn')) {
+                    document.getElementById('notification-dropdown').classList.toggle('hidden');
+                }
+            });
+            detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal || e.target.closest('[data-action="close-modal"]')) detailsModal.classList.add('hidden'); });
+            document.getElementById('sidebar-nav').addEventListener('click', (e) => { const link = e.target.closest('.sidebar-link'); if (link && routes[link.id]) { e.preventDefault(); navigate(link.id); } });
+            
+            navigate('nav-dashboard');
+        });
+        lucide.createIcons();
+    </script>
+</body>
+</html>

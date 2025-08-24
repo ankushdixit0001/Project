@@ -3,49 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Disha Bharti College</title>
+    <title>Disha Bharti College Portal - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="student.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-effect { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .active-tab { background-color: #2563eb; color: white; }
+        .inactive-tab { background-color: transparent; color: #9ca3af; }
+        .form-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 15% 50%, rgba(49, 130, 206, 0.2), transparent 40%), radial-gradient(circle at 85% 30%, rgba(127, 29, 29, 0.15), transparent 40%); z-index: 1; opacity: 0.5; pointer-events: none; }
+        .form-content { position: relative; z-index: 2; }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
-    <section class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
-            <div class="text-center mb-8">
-                <i class="fas fa-university text-5xl text-blue-600"></i>
-                <h2 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">College Portal Login</h2>
+<body class="bg-gray-900 text-white">
+
+    <div class="min-h-screen flex items-center justify-center p-4 form-container overflow-hidden">
+        <div class="grid md:grid-cols-2 max-w-6xl w-full rounded-2xl shadow-2xl overflow-hidden glass-effect">
+            
+            <!-- Left Side: Information -->
+            <div class="hidden md:block p-12 bg-black bg-opacity-20">
+                <div class="flex flex-col h-full">
+                    <div class="flex items-center space-x-3">
+                        <svg class="h-10 w-10 text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><path d="M12 5v17"/></svg>
+                        <h1 class="text-2xl font-bold text-white">Disha Bharti College of Management & Education</h1>
+                    </div>
+                    <p class="mt-3 text-gray-300">Saharanpur Campus | Student & Admin Portal</p>
+                    <div class="mt-12">
+                        <h2 class="text-xl font-semibold text-blue-300">Portal Features</h2>
+                        <ul class="mt-6 space-y-5 text-gray-300">
+                            <li class="flex items-start"><i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Academic Records:</strong> View grades, transcripts, and GPA tracking.</span></li>
+                            <li class="flex items-start"><i data-lucide="book-marked" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Course Management:</strong> Register for courses and access materials.</span></li>
+                            <li class="flex items-start"><i data-lucide="dollar-sign" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Financial Hub:</strong> Pay tuition fees and manage scholarships.</span></li>
+                            <li class="flex items-start"><i data-lucide="calendar-days" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Campus Events:</strong> Stay updated with university events.</span></li>
+                        </ul>
+                    </div>
+                    <!-- <div class="mt-auto text-sm text-gray-500">&copy; 2025 Disha Bharti College. All Rights Reserved.</div> -->
+                </div>
             </div>
-            <form id="login-form">
-                <div class="mb-4">
-                    <label for="login-role" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Login As</label>
-                    <select id="login-role" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600">
-                        <option value="student">Student</option>
-                        <option value="admin">Admin</option>
-                    </select>
+
+            <!-- Right Side: Login Form -->
+            <div class="p-8 md:p-12 bg-gray-900 bg-opacity-50 form-content">
+                <div class="mb-8">
+                    <div class="flex border border-gray-700 rounded-lg p-1">
+                        <button id="student-tab" class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Student Portal</button>
+                        <button id="admin-tab" class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Admin Panel</button>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="login-email" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
-                    <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required value="ankushdixit@example.com">
-                </div>
-                <div class="mb-6">
-                    <label for="login-password" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Password</label>
-                    <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required value="password123">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center">
-                    <span class="button-text">Login</span>
-                    <div class="spinner hidden"></div>
-                </button>
-                <p id="login-error" class="text-red-500 text-sm text-center mt-4"></p>
-            </form>
-            <p class="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
-                New Student? <a href="register.html" class="text-blue-600 hover:underline">Register here</a>
-            </p>
-            <div class="text-center mt-4">
-                <a href="index.html" class="text-sm text-blue-600 hover:underline">&larr; Back to Main Site</a>
+                
+                <h2 id="form-title" class="text-3xl font-bold mb-2 text-white">Student Login</h2>
+                <p class="text-gray-400 mb-8">Welcome back! Please enter your credentials.</p>
+
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="user-id" class="block text-sm font-medium text-gray-300">Student ID / Email</label>
+                        <div class="mt-2 relative">
+                            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input id="user-id" type="text" autocomplete="username" required class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                            <a href="#" class="text-sm font-semibold text-blue-400 hover:text-blue-300">Forgot password?</a>
+                        </div>
+                        <div class="mt-2 relative">
+                             <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input id="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <!-- Error Message -->
+                    <div id="error-message" class="hidden text-sm text-red-400 flex items-center">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>
+                        <span>Invalid credentials. Please try again.</span>
+                    </div>
+
+                    <div>
+                        <button id="login-button" type="submit" class="flex w-full justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all duration-300 transform hover:scale-105">
+                            <span id="button-text">Sign In</span>
+                            <i id="button-spinner" data-lucide="loader" class="w-5 h-5 ml-2 hidden spinner"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
-    <script src="login.js"></script>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const studentTab = document.getElementById('student-tab');
+        const adminTab = document.getElementById('admin-tab');
+        const formTitle = document.getElementById('form-title');
+        const userIdLabel = document.querySelector('label[for="user-id"]');
+        const userIdInput = document.getElementById('user-id');
+        const loginForm = document.getElementById('login-form');
+        const errorMessage = document.getElementById('error-message');
+        const loginButton = document.getElementById('login-button');
+        const buttonText = document.getElementById('button-text');
+        const buttonSpinner = document.getElementById('button-spinner');
+
+        function setActiveTab(tab) {
+            errorMessage.classList.add('hidden'); // Hide error on tab switch
+            if (tab === 'student') {
+                studentTab.classList.add('active-tab');
+                studentTab.classList.remove('inactive-tab');
+                adminTab.classList.add('inactive-tab');
+                adminTab.classList.remove('active-tab');
+                formTitle.textContent = 'Student Login';
+                userIdLabel.textContent = 'Student ID / Email';
+                userIdInput.placeholder = 'Enter ID: student';
+            } else {
+                adminTab.classList.add('active-tab');
+                adminTab.classList.remove('inactive-tab');
+                studentTab.classList.add('inactive-tab');
+                studentTab.classList.remove('active-tab');
+                formTitle.textContent = 'Admin Login';
+                userIdLabel.textContent = 'Admin ID / Email';
+                userIdInput.placeholder = 'Enter ID: admin';
+            }
+        }
+
+        studentTab.addEventListener('click', () => setActiveTab('student'));
+        adminTab.addEventListener('click', () => setActiveTab('admin'));
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show loading spinner
+            buttonText.textContent = 'Signing In...';
+            buttonSpinner.classList.remove('hidden');
+            loginButton.disabled = true;
+            errorMessage.classList.add('hidden');
+
+            const id = userIdInput.value;
+            const pass = document.getElementById('password').value;
+            const isStudentLogin = studentTab.classList.contains('active-tab');
+
+            // Simulate network delay
+            setTimeout(() => {
+                let isAuthenticated = false;
+                let redirectUrl = '';
+
+                if (isStudentLogin && id === 'student' && pass === 'password') {
+                    isAuthenticated = true;
+                    redirectUrl = 'student_panel.html';
+                } else if (!isStudentLogin && id === 'admin' && pass === 'password') {
+                    isAuthenticated = true;
+                    redirectUrl = 'admin_panel.html';
+                }
+
+                if (isAuthenticated) {
+                    window.location.href = redirectUrl;
+                } else {
+                    errorMessage.classList.remove('hidden');
+                    // Reset button
+                    buttonText.textContent = 'Sign In';
+                    buttonSpinner.classList.add('hidden');
+                    loginButton.disabled = false;
+                }
+                lucide.createIcons(); // Redraw icons if needed after DOM change
+            }, 1000);
+        });
+
+        // Initial state
+        setActiveTab('student');
+    </script>
 </body>
 </html>
