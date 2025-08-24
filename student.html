@@ -3,98 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Section - Disha Bharti College</title>
-    <!-- Tailwind CSS -->
+    <title>Student Dashboard - Disha Bharti College</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- External CSS -->
     <link rel="stylesheet" href="student.css">
-    <script>
-        // Set theme on initial load to prevent flash of unstyled content
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-    </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 
-    <!-- Auth Section -->
-    <section id="auth-section" class="min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-md">
-            <!-- Login Form -->
-            <div id="login-container">
-                <div class="text-center mb-8">
-                    <i class="fas fa-user-graduate text-5xl text-blue-600"></i>
-                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Student Portal Login</h2>
-                </div>
-                <form id="login-form">
-                    <div class="mb-4">
-                        <label for="login-email" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
-                        <input type="email" id="login-email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required value="ankushdixit@example.com">
-                    </div>
-                    <div class="mb-6">
-                        <label for="login-password" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Password</label>
-                        <input type="password" id="login-password" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required value="password123">
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 flex items-center justify-center">
-                        <span class="button-text">Login</span>
-                        <div class="spinner hidden"></div>
-                    </button>
-                    <p id="login-error" class="text-red-500 text-sm text-center mt-4"></p>
-                </form>
-                <p class="text-center mt-4 text-sm">
-                    Don't have an account? <a href="#" id="show-register" class="text-blue-600 hover:underline">Register here</a>
-                </p>
-            </div>
+    <div id="loading-spinner" class="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-50">
+        <div class="spinner border-t-blue-600 border-4 w-12 h-12"></div>
+    </div>
 
-            <!-- Registration Form (Initially Hidden) -->
-            <div id="register-container" class="hidden">
-                <div class="text-center mb-8">
-                    <i class="fas fa-user-plus text-5xl text-blue-600"></i>
-                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white mt-4">Student Registration</h2>
-                </div>
-                <form id="register-form">
-                    <div class="mb-4">
-                        <label for="register-name" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Full Name</label>
-                        <input type="text" id="register-name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="register-email" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
-                        <input type="email" id="register-email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <div class="mb-6">
-                        <label for="register-password" class="block text-gray-700 dark:text-gray-300 font-medium mb-2">Password</label>
-                        <input type="password" id="register-password" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 flex items-center justify-center">
-                        <span class="button-text">Register</span>
-                        <div class="spinner hidden"></div>
-                    </button>
-                    <p id="register-error" class="text-red-500 text-sm text-center mt-4"></p>
-                </form>
-                <p class="text-center mt-4 text-sm">
-                    Already have an account? <a href="#" id="show-login" class="text-blue-600 hover:underline">Login here</a>
-                </p>
-            </div>
-             <div class="text-center mt-4">
-                <a href="index.html" class="text-sm text-blue-600 hover:underline">&larr; Back to Main Site</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Student Dashboard Section (Initially Hidden) -->
     <section id="student-dashboard" class="hidden container mx-auto px-6 py-12">
         <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
             <div>
                 <h1 class="text-4xl font-bold dark:text-white text-center md:text-left">Welcome, <span id="student-name"></span></h1>
                 <p class="text-lg text-gray-600 dark:text-gray-400 text-center md:text-left">Student ID: <span id="student-id-display"></span></p>
             </div>
-            <button id="logout-button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">Logout</button>
+            <a href="login.html" id="logout-button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">Logout</a>
         </header>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -107,15 +34,13 @@
         </div>
     </section>
 
-    <!-- Modals -->
-    <div id="admit-card-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Admit Card</h2><p id="admit-card-content">Your admit card for the upcoming exams is available for download.</p><button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Download PDF</button></div></div>
-    <div id="results-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Results</h2><div id="results-content"><p>Loading results...</p></div></div></div>
-    <div id="fees-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Fee Payment</h2><div id="fees-content"><p>Loading fee status...</p></div></div></div>
-    <div id="registration-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Course Registration</h2><div id="registration-content"><p>Loading registration status...</p></div></div></div>
-    <div id="library-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Library Portal</h2><div id="library-content"><p>Loading library records...</p></div></div></div>
-    <div id="profile-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">My Profile</h2><div id="profile-content"><p>Loading profile...</p></div></div></div>
+    <div id="admit-card-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Admit Card</h2><p id="admit-card-content">Your admit card is not yet available.</p><button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 opacity-50 cursor-not-allowed">Download PDF</button></div></div>
+    <div id="results-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Results</h2><div id="results-content"></div></div></div>
+    <div id="fees-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Fee Payment</h2><div id="fees-content"></div></div></div>
+    <div id="registration-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Course Registration</h2><div id="registration-content"></div></div></div>
+    <div id="library-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">Library Portal</h2><div id="library-content"></div></div></div>
+    <div id="profile-modal" class="modal"><div class="modal-content"><span class="close-button">&times;</span><h2 class="text-2xl font-bold mb-4">My Profile</h2><div id="profile-content"></div></div></div>
 
-    <!-- External JavaScript -->
     <script src="student.js"></script>
 </body>
 </html>

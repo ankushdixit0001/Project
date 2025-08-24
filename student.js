@@ -1,143 +1,51 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Mock Student Database ---
-    // A more detailed database to simulate a real backend.
-    const studentsDB = {
-        'user1': {
-            name: 'Ankush Dixit', email: 'ankushdixit@example.com', password: 'password123', studentId: '100001',
-            results: { 'Semester 1': 'A+', 'Semester 2': 'A+' },
-            fees: { total: 50000, paid: 50000, due: 0 },
-            registration: { status: 'Pending', courses: ['BCA101', 'BCA102'] },
-            library: { issued: ['The Lean Startup'], fines: 0 },
-        },
-        'user2': {
-            name: 'Amit Kumar', email: 'amit.kumar@example.com', password: 'password123', studentId: '100002',
-            results: { 'Semester 1': 'B+', 'Semester 2': 'A' },
-            fees: { total: 60000, paid: 30000, due: 30000 },
-            registration: { status: 'Pending', courses: [] },
-            library: { issued: [], fines: 50 },
-        },
-        'user3': {
-            name: 'Rahul Verma', email: 'rahul.verma@example.com', password: 'password123', studentId: '100003',
-            results: { 'Semester 1': 'A', 'Semester 2': 'B' },
-            fees: { total: 55000, paid: 55000, due: 0 },
-            registration: { status: 'Completed', courses: ['MBA201', 'MBA202'] },
-            library: { issued: ['Zero to One', 'Good to Great'], fines: 0 },
-        }
-    };
-
-    // --- Element References ---
-    const authSection = document.getElementById('auth-section');
-    const dashboardSection = document.getElementById('student-dashboard');
-    const loginContainer = document.getElementById('login-container');
-    const registerContainer = document.getElementById('register-container');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const logoutButton = document.getElementById('logout-button');
-    const showRegister = document.getElementById('show-register');
-    const showLogin = document.getElementById('show-login');
-    const loginError = document.getElementById('login-error');
-    const registerError = document.getElementById('register-error');
-
-    let currentStudent = null;
-
-    // --- Helper function to toggle loading state on buttons ---
-    const toggleLoading = (form, isLoading) => {
-        const button = form.querySelector('button[type="submit"]');
-        const buttonText = button.querySelector('.button-text');
-        const spinner = button.querySelector('.spinner');
-        if (isLoading) {
-            buttonText.classList.add('hidden');
-            spinner.classList.remove('hidden');
-            button.disabled = true;
-        } else {
-            buttonText.classList.remove('hidden');
-            spinner.classList.add('hidden');
-            button.disabled = false;
-        }
-    };
-
-    // --- Check for an active session on page load ---
-    const loggedInStudentId = sessionStorage.getItem('loggedInStudentId');
-    if (loggedInStudentId && studentsDB[loggedInStudentId]) {
-        currentStudent = studentsDB[loggedInStudentId];
-        displayDashboard(currentStudent);
+document.addEventListener('DOMContentLoaded', async () => {
+    // Authentication Guard
+    if (sessionStorage.getItem('authRole') !== 'student' || !sessionStorage.getItem('loggedInStudentId')) {
+        window.location.href = 'login.html';
+        return;
     }
 
-    // --- Show/Hide Auth Forms ---
-    showRegister.addEventListener('click', (e) => { e.preventDefault(); loginContainer.classList.add('hidden'); registerContainer.classList.remove('hidden'); });
-    showLogin.addEventListener('click', (e) => { e.preventDefault(); registerContainer.classList.add('hidden'); loginContainer.classList.remove('hidden'); });
+    const dashboardSection = document.getElementById('student-dashboard');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const logoutButton = document.getElementById('logout-button');
+    let currentStudent = null;
 
-    // --- Registration Logic ---
-    registerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        toggleLoading(registerForm, true);
-        registerError.textContent = '';
+    try {
+        const response = await fetch('students.json');
+        const studentsDB = await response.json();
+        const loggedInStudentId = sessionStorage.getItem('loggedInStudentId');
+        currentStudent = studentsDB.find(s => s.id === loggedInStudentId);
         
-        setTimeout(() => { // Simulate network delay
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-
-            if (Object.values(studentsDB).some(s => s.email === email)) {
-                registerError.textContent = 'A student with this email already exists.';
-                toggleLoading(registerForm, false);
-                return;
-            }
-
-            const newId = 'user' + (Object.keys(studentsDB).length + 1);
-            const newStudent = {
-                name, email, password, studentId: String(Math.floor(100000 + Math.random() * 900000)),
-                results: {}, fees: { total: 50000, paid: 0, due: 50000 }, registration: { status: 'Not Started', courses: [] }, library: { issued: [], fines: 0 },
-            };
-            studentsDB[newId] = newStudent;
-            currentStudent = newStudent;
-            
-            sessionStorage.setItem('loggedInStudentId', newId);
+        if (currentStudent) {
             displayDashboard(currentStudent);
-            toggleLoading(registerForm, false);
-        }, 1000);
-    });
-
-    // --- Login Logic ---
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        toggleLoading(loginForm, true);
-        loginError.textContent = '';
-
-        setTimeout(() => { // Simulate network delay
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            const studentId = Object.keys(studentsDB).find(id => studentsDB[id].email === email && studentsDB[id].password === password);
-
-            if (studentId) {
-                currentStudent = studentsDB[studentId];
-                sessionStorage.setItem('loggedInStudentId', studentId);
-                displayDashboard(currentStudent);
-            } else {
-                loginError.textContent = 'Invalid email or password.';
-            }
-            toggleLoading(loginForm, false);
-        }, 1000);
-    });
-
+        } else {
+            // If student ID from session is not found in DB, logout
+            sessionStorage.clear();
+            window.location.href = 'login.html';
+        }
+    } catch (error) {
+        console.error('Failed to load student data:', error);
+        alert('Could not load student data. Please try again.');
+        window.location.href = 'login.html';
+    }
+    
     // --- Logout Logic ---
-    logoutButton.addEventListener('click', () => {
-        sessionStorage.removeItem('loggedInStudentId');
-        currentStudent = null;
-        authSection.classList.remove('hidden');
-        dashboardSection.classList.add('hidden');
+    logoutButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default link behavior
+        sessionStorage.clear(); // Clear all session data
+        window.location.href = 'login.html';
     });
 
     // --- Display Dashboard Function ---
     function displayDashboard(student) {
-        authSection.classList.add('hidden');
-        dashboardSection.classList.remove('hidden');
         document.getElementById('student-name').textContent = student.name;
         document.getElementById('student-id-display').textContent = student.studentId;
+        loadingSpinner.style.display = 'none';
+        dashboardSection.classList.remove('hidden');
     }
     
-    // --- Modal Logic ---
+    // --- Modal Logic (unchanged from previous version) ---
+    // ... (keep the existing modal logic here)
     const modals = document.querySelectorAll('.modal');
     document.querySelectorAll('.dashboard-card').forEach(card => {
         card.addEventListener('click', () => {
@@ -161,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
+    
     // --- Populate Modal Content ---
     function populateModalContent(modalId) {
         if (!currentStudent) return;
@@ -203,10 +111,4 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
     }
-
-    // --- System Theme Sync ---
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const updateTheme = (e) => document.documentElement.classList.toggle('dark', e.matches);
-    darkModeMediaQuery.addEventListener('change', updateTheme);
-    updateTheme(darkModeMediaQuery); // Initial check
 });

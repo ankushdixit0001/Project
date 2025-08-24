@@ -1,0 +1,32 @@
+[
+  {
+    "id": "BCA101",
+    "name": "Introduction to Programming",
+    "courseCode": "BCA-101",
+    "credits": 4
+  },
+  {
+    "id": "BCA102",
+    "name": "Database Management Systems",
+    "courseCode": "BCA-102",
+    "credits": 4
+  },
+  {
+    "id": "BBA201",
+    "name": "Principles of Management",
+    "courseCode": "BBA-201",
+    "credits": 3
+  },
+  {
+    "id": "MBA201",
+    "name": "Marketing Management",
+    "courseCode": "MBA-201",
+    "credits": 3
+  },
+  {
+    "id": "MBA202",
+    "name": "Financial Accounting",
+    "courseCode": "MBA-202",
+    "credits": 3
+  }
+]
