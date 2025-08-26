@@ -20,12 +20,18 @@
         .calendar-day { min-height: 6rem; }
         .event-dot { width: 6px; height: 6px; }
         .modal { transition: opacity 0.3s ease; }
+        /* Sidebar transition for mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                transition: transform 0.3s ease-in-out;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
-    <div class="flex h-screen">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col flex-shrink-0">
+        <aside id="sidebar" class="sidebar absolute md:relative z-20 w-64 bg-gray-900 border-r border-gray-800 flex-shrink-0 transform -translate-x-full md:translate-x-0 md:flex flex-col">
             <div class="p-6 flex items-center space-x-3 border-b border-gray-800">
                 <svg class="h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><path d="M12 5v17"/></svg>
                 <h1 class="text-lg font-bold">Disha Bharti College</h1>
@@ -47,12 +53,22 @@
         </aside>
 
         <!-- Main Content -->
-        <main id="main-content" class="flex-1 p-8 overflow-y-auto"></main>
+        <div class="flex-1 flex flex-col">
+            <!-- Header for Main Content -->
+            <header class="md:hidden flex justify-between items-center p-4 bg-gray-900 border-b border-gray-800">
+                 <button id="menu-toggle" class="p-2 rounded-md hover:bg-gray-800">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <h2 class="text-xl font-bold" id="header-title">Dashboard</h2>
+                <div class="w-8"></div> <!-- Spacer -->
+            </header>
+            <main id="main-content" class="flex-1 p-4 md:p-8 overflow-y-auto"></main>
+        </div>
     </div>
 
     <!-- Course Details Modal -->
     <div id="detailsModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
-        <div id="detailsModalContent" class="glass-effect rounded-xl p-8 w-full max-w-2xl">
+        <div id="detailsModalContent" class="glass-effect rounded-xl p-6 md:p-8 w-full max-w-2xl">
             <!-- Modal content will be injected here -->
         </div>
     </div>
@@ -63,6 +79,10 @@
             const navLinks = document.querySelectorAll('.sidebar-link');
             const detailsModal = document.getElementById('detailsModal');
             const detailsModalContent = document.getElementById('detailsModalContent');
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const headerTitle = document.getElementById('header-title');
+            const sidebarNav = document.getElementById('sidebar-nav'); // FIX: Added this line
             
             // --- MOCK DATA ---
             const studentData = { name: "Priya Sharma", id: "DBC230567", avatarText: "PS", email: "priya.s@example.com", phone: "+91 9876543210", dob: "2004-05-15", address: "123 Civil Lines, Saharanpur" };
@@ -89,7 +109,7 @@
                 ]
             };
             const calendarEvents = [
-                { day: 24, title: 'Guest Lecture: AI', color: 'blue' },
+                { day: 26, title: 'Guest Lecture: AI', color: 'blue' },
                 { day: 30, title: 'Project Submission', color: 'red' },
                 { day: 15, title: 'Fee Payment Due', color: 'yellow', nextMonth: true }
             ];
@@ -102,8 +122,8 @@
             // --- RENDER FUNCTIONS ---
             const renderDashboard = () => `
                 <header class="flex justify-between items-center mb-8">
-                    <div><h2 class="text-3xl font-bold">Welcome, ${studentData.name}!</h2><p class="text-gray-400">Here's your academic snapshot for today, August 24, 2025.</p></div>
-                    <div class="flex items-center space-x-4 relative">
+                    <div><h2 class="text-2xl md:text-3xl font-bold">Welcome, ${studentData.name.split(' ')[0]}!</h2><p class="text-gray-400 text-sm md:text-base">Here's your academic snapshot for today, August 26, 2025.</p></div>
+                    <div class="hidden md:flex items-center space-x-4 relative">
                         <button id="notification-btn" class="p-2 rounded-full hover:bg-gray-800 relative"><i data-lucide="bell" class="w-6 h-6 text-gray-300"></i><span class="absolute top-1 right-1.5 h-2 w-2 rounded-full bg-red-500"></span></button>
                         <div id="notification-dropdown" class="hidden absolute top-12 right-0 w-72 glass-effect rounded-xl p-4 text-sm z-10"><h4 class="font-semibold mb-2">Notifications</h4><div class="space-y-2">${notificationsData.map(n => `<div class="p-2 bg-gray-800 rounded-lg"><div>${n.text}</div><div class="text-xs text-gray-400 mt-1">${n.time}</div></div>`).join('')}</div></div>
                         <img src="https://placehold.co/40x40/1f2937/9ca3af?text=${studentData.avatarText}" class="w-10 h-10 rounded-full border-2 border-blue-500">
@@ -112,7 +132,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-6">
                         <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Today's Schedule</h3><div class="space-y-3">${scheduleData.map(s => `<div class="flex items-center"><span class="font-bold text-blue-400 w-24">${s.time}</span><div><p class="font-medium">${s.course}</p><p class="text-sm text-gray-400">Room: ${s.room}</p></div></div>`).join('')}</div></div>
-                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">My Current Courses</h3><div class="space-y-4">${coursesData.slice(0, 2).map(c => `<div class="p-4 bg-gray-800 rounded-lg flex justify-between items-center"><div><p class="font-semibold">${c.id}: ${c.title}</p><p class="text-sm text-gray-400">${c.prof}</p></div><button data-action="view-course" data-course-id="${c.id}" class="action-btn text-sm text-blue-400 hover:underline">View Details</button></div>`).join('')}</div></div>
+                        <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">My Current Courses</h3><div class="space-y-4">${coursesData.slice(0, 2).map(c => `<div class="p-4 bg-gray-800 rounded-lg flex justify-between items-center"><div><p class="font-semibold">${c.id}: ${c.title}</p><p class="text-sm text-gray-400">${c.prof}</p></div><button data-action="view-course" data-course-id="${c.id}" class="action-btn text-sm text-blue-400 hover:underline">Details</button></div>`).join('')}</div></div>
                     </div>
                     <div class="space-y-6">
                         <div class="glass-effect rounded-xl p-6"><h3 class="text-xl font-semibold mb-4">Recent Grades</h3><ul class="space-y-3">${gradesData.slice(0,3).map(g => `<li class="flex justify-between items-center"><span>${g.course}</span> <span class="font-bold text-green-400 text-lg">${g.grade}</span></li>`).join('')}</ul></div>
@@ -160,7 +180,7 @@
             };
 
             const renderCalendar = () => {
-                const today = new Date('2025-08-24');
+                const today = new Date('2025-08-26');
                 const month = today.getMonth();
                 const year = today.getFullYear();
                 const firstDay = new Date(year, month, 1).getDay();
@@ -179,15 +199,15 @@
             const renderLibrary = () => `
                 <h2 class="text-3xl font-bold mb-6">Digital Library</h2>
                 <div class="glass-effect rounded-xl p-6">
-                    <div class="relative mb-6"><i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i><input type="text" placeholder="Search for e-books, journals, research papers..." class="w-full bg-gray-800 rounded-lg py-3 pl-12 pr-4 ring-1 ring-gray-700 focus:ring-blue-500"></div>
+                    <div class="relative mb-6"><i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i><input type="text" placeholder="Search for e-books, journals..." class="w-full bg-gray-800 rounded-lg py-3 pl-12 pr-4 ring-1 ring-gray-700 focus:ring-blue-500"></div>
                     <div class="space-y-4">${libraryData.map(item => `<div class="p-4 bg-gray-800 rounded-lg flex justify-between items-center"><div><p class="font-semibold">${item.title}</p><p class="text-sm text-gray-400">${item.author}</p></div><span class="text-xs font-medium bg-blue-500/50 text-blue-300 px-2 py-1 rounded-full">${item.type}</span></div>`).join('')}</div>
                 </div>`;
 
             const renderProfile = () => `
                 <h2 class="text-3xl font-bold mb-6">My Profile</h2>
-                <div class="glass-effect rounded-xl p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-effect rounded-xl p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="text-center md:border-r border-gray-700 md:pr-8"><img src="https://placehold.co/128x128/1f2937/9ca3af?text=${studentData.avatarText}" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500"><h3 class="text-2xl font-bold">${studentData.name}</h3><p class="text-gray-400">${studentData.id}</p></div>
-                    <div class="md:col-span-2 space-y-4 text-lg">
+                    <div class="md:col-span-2 space-y-4 text-base md:text-lg">
                         <div class="flex items-center"><i data-lucide="mail" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.email}</span></div>
                         <div class="flex items-center"><i data-lucide="phone" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.phone}</span></div>
                         <div class="flex items-center"><i data-lucide="cake" class="w-5 h-5 mr-4 text-gray-400"></i><span>${studentData.dob}</span></div>
@@ -196,13 +216,29 @@
                 </div>`;
 
             const routes = {
-                'nav-dashboard': renderDashboard, 'nav-courses': renderCourses,
-                'nav-grades': renderGrades, 'nav-financials': renderFinancials,
-                'nav-calendar': renderCalendar, 'nav-library': renderLibrary,
-                'nav-profile': renderProfile,
+                'nav-dashboard': { render: renderDashboard, title: 'Dashboard' },
+                'nav-courses': { render: renderCourses, title: 'My Courses' },
+                'nav-grades': { render: renderGrades, title: 'Grades' },
+                'nav-financials': { render: renderFinancials, title: 'Financials' },
+                'nav-calendar': { render: renderCalendar, title: 'Calendar' },
+                'nav-library': { render: renderLibrary, title: 'Library' },
+                'nav-profile': { render: renderProfile, title: 'My Profile' },
             };
-            const navigate = (id) => { mainContent.innerHTML = routes[id](); lucide.createIcons(); navLinks.forEach(link => { link.classList.toggle('active', link.id === id); }); };
+
+            const navigate = (id) => {
+                mainContent.innerHTML = routes[id].render();
+                headerTitle.textContent = routes[id].title;
+                lucide.createIcons();
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.id === id);
+                });
+                // Close sidebar on navigation in mobile view
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            };
             
+            // --- EVENT LISTENERS ---
             mainContent.addEventListener('click', (e) => {
                 const link = e.target.closest('.nav-link');
                 const button = e.target.closest('.action-btn');
@@ -216,9 +252,22 @@
                     document.getElementById('notification-dropdown').classList.toggle('hidden');
                 }
             });
+
             detailsModal.addEventListener('click', (e) => { if (e.target === detailsModal || e.target.closest('[data-action="close-modal"]')) detailsModal.classList.add('hidden'); });
-            document.getElementById('sidebar-nav').addEventListener('click', (e) => { const link = e.target.closest('.sidebar-link'); if (link && routes[link.id]) { e.preventDefault(); navigate(link.id); } });
             
+            sidebarNav.addEventListener('click', (e) => {
+                const link = e.target.closest('.sidebar-link');
+                if (link && routes[link.id]) {
+                    e.preventDefault();
+                    navigate(link.id);
+                }
+            });
+
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            // Initial load
             navigate('nav-dashboard');
         });
         lucide.createIcons();

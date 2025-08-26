@@ -7,10 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Preloader ---
     const preloader = document.getElementById('preloader');
-    // Hide the preloader with a fade-out effect once the page content is fully loaded.
     window.addEventListener('load', () => {
         preloader.style.opacity = '0';
-        // Use setTimeout to ensure the preloader is hidden after the transition.
         setTimeout(() => {
             preloader.style.display = 'none';
         }, 500); // Matches the transition duration in the CSS.
@@ -26,23 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} pageId The ID of the page section to display (e.g., 'about', 'contact').
      */
     function showPage(pageId) {
-        // Hide all page sections.
         pages.forEach(page => {
             page.classList.add('hidden');
         });
-        // Show the target page.
         const activePage = document.getElementById(pageId);
         if (activePage) {
             activePage.classList.remove('hidden');
         }
         
-        // Update the active link style in the main navigation.
         const targetHref = `#${pageId}`;
         document.querySelectorAll('.nav-link').forEach(link => {
             link.classList.toggle('active-link', link.getAttribute('href') === targetHref);
         });
         
-        // Scroll to the top of the page for a clean transition.
         window.scrollTo(0, 0);
     }
     
@@ -54,19 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleNavClick(e) {
         const href = this.getAttribute('href');
         if (href.startsWith('#') && href.length > 1) {
-            e.preventDefault(); // Stop the browser's default jump.
+            e.preventDefault();
             const pageId = href.substring(1);
             showPage(pageId);
-            // If the mobile menu is open, close it after navigation.
-            if (mobileMenu.offsetParent !== null) {
+            if (!mobileMenu.classList.contains('hidden')) {
                 toggleMobileMenu();
             }
         }
     }
 
-    // Attach the click handler to all internal navigation links.
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        // Exclude the 'back-to-top' button from this SPA logic.
         if(anchor.id !== 'back-to-top') {
             anchor.addEventListener('click', handleNavClick);
         }
@@ -81,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileMenuButton.addEventListener('click', toggleMobileMenu);
 
     // --- Form Submission Handling (Mock) ---
-    // This provides user feedback without a real backend.
     const infoForm = document.getElementById('info-form');
     if(infoForm) {
         infoForm.addEventListener('submit', function(e) {
@@ -89,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const feedback = document.getElementById('form-feedback');
             feedback.innerHTML = '<p class="text-green-600 font-semibold">Thank you! Your inquiry has been submitted successfully.</p>';
             infoForm.reset();
-            setTimeout(() => { feedback.innerHTML = ''; }, 5000); // Message disappears after 5s.
+            setTimeout(() => { feedback.innerHTML = ''; }, 5000);
         });
     }
     
@@ -110,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dotsContainer = document.querySelector('.carousel-dots');
     
     if (slides.length > 0) {
-        // Dynamically create navigation dots based on the number of slides.
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.classList.add('carousel-dot');
@@ -125,12 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!slides[currentSlide] || !dots[currentSlide]) return;
             slides[currentSlide].classList.remove('active');
             dots[currentSlide].classList.remove('active');
-            currentSlide = (n + slides.length) % slides.length; // Loop through slides.
+            currentSlide = (n + slides.length) % slides.length;
             slides[currentSlide].classList.add('active');
             dots[currentSlide].classList.add('active');
         }
 
-        // Auto-play the carousel.
         setInterval(() => goToSlide(currentSlide + 1), 5000);
     }
 
@@ -138,28 +126,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('main-header');
     const backToTopButton = document.getElementById('back-to-top');
     
-    // Use Intersection Observer for efficient scroll animations.
     const scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // If the element is in the viewport, add the 'visible' class to trigger the animation.
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
         });
-    }, { threshold: 0.1 }); // Trigger when 10% of the element is visible.
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in-up').forEach(el => scrollObserver.observe(el));
 
-    // Handle header style and back-to-top button visibility on scroll.
     window.onscroll = function() {
-        // Style the header when scrolling down.
         if (window.scrollY > 50) {
             header.classList.add('header-scrolled');
         } else {
             header.classList.remove('header-scrolled');
         }
 
-        // Show/hide the back-to-top button.
         if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
             backToTopButton.classList.add('show');
         } else {
@@ -183,9 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const lazyImage = entry.target;
-                lazyImage.src = lazyImage.dataset.src; // Load the actual image.
+                lazyImage.src = lazyImage.dataset.src;
                 lazyImage.classList.remove('lazy');
-                lazyImageObserver.unobserve(lazyImage); // Stop observing once loaded.
+                lazyImageObserver.unobserve(lazyImage);
             }
         });
     });
@@ -193,21 +176,12 @@ document.addEventListener('DOMContentLoaded', () => {
     lazyImages.forEach(lazyImage => lazyImageObserver.observe(lazyImage));
 
     // --- System Theme Sync ---
-    /**
-     * Toggles the 'dark' class on the root <html> element based on system preference.
-     * @param {boolean} isDarkMode - True if the system is in dark mode.
-     */
     function updateTheme(isDarkMode) {
         document.documentElement.classList.toggle('dark', isDarkMode);
     }
 
-    // Check the system's preferred color scheme.
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // Set the initial theme on page load.
     updateTheme(darkModeMediaQuery.matches);
-
-    // Listen for changes in the system theme (e.g., user changes it in OS settings).
     darkModeMediaQuery.addEventListener('change', (e) => {
         updateTheme(e.matches);
     });

@@ -162,3 +162,12 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Button Press Effect */
+.btn-press {
+    transition: transform 0.1s ease-in-out;
+}
+
+.btn-press:active {
+    transform: scale(0.98);
+}
