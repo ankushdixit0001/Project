@@ -188,7 +188,34 @@
             
             const renderFeeManagement = () => {
                 let feeData = studentsData.map((s, i) => ({...s, originalIndex: i, balance: s.totalFees - s.amountPaid }));
-                const tableHtml = (data) => `<div class="overflow-x-auto"><table class="w-full text-sm text-left"><thead class="text-xs text-gray-400 uppercase bg-gray-800"><tr><th class="px-6 py-3 rounded-l-lg">Student Name</th><th class="hidden md:table-cell">Course</th><th>Balance Due</th><th>Status</th><th class="px-6 py-3 rounded-r-lg text-center">Actions</th></tr></thead><tbody>${data.map(s => `<tr class="border-b border-gray-800"><td class="px-6 py-4 font-medium">${s.name}</td><td class="px-6 py-4 hidden md:table-cell">${s.course}</td><td class="px-6 py-4 font-bold ${s.balance > 0 ? 'text-yellow-400' : 'text-green-400'}">₹ ${s.balance.toLocaleString()}</td><td class="px-6 py-4"><span class="px-2 py-1 text-xs rounded-full ${s.balance > 0 ? 'bg-red-500/50 text-red-300' : 'bg-green-500/50 text-green-300'}">${s.balance > 0 ? 'Pending' : 'Paid'}</span></td><td class="px-6 py-4 text-center"><button data-modal="recordPayment" data-index="${s.originalIndex}" class="action-btn btn-press bg-blue-600 hover:bg-blue-500 text-white font-bold py-1 px-3 rounded-lg text-xs">Record Payment</button></td></tr>`).join('')}</tbody></table></div>`;
+                const tableHtml = (data) => `<div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-gray-400 uppercase bg-gray-800">
+                            <tr>
+                                <th class="px-4 md:px-6 py-3 rounded-l-lg">Student</th>
+                                <th class="hidden lg:table-cell px-6 py-3">Course</th>
+                                <th class="px-4 md:px-6 py-3">Balance</th>
+                                <th class="px-4 md:px-6 py-3">Status</th>
+                                <th class="px-4 md:px-6 py-3 rounded-r-lg text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(s => `
+                                <tr class="border-b border-gray-800">
+                                    <td class="px-4 md:px-6 py-4 font-medium">${s.name}</td>
+                                    <td class="hidden lg:table-cell px-6 py-4">${s.course}</td>
+                                    <td class="px-4 md:px-6 py-4 font-bold ${s.balance > 0 ? 'text-yellow-400' : 'text-green-400'}">₹ ${s.balance.toLocaleString()}</td>
+                                    <td class="px-4 md:px-6 py-4">
+                                        <span class="px-2 py-1 text-xs rounded-full ${s.balance > 0 ? 'bg-red-500/50 text-red-300' : 'bg-green-500/50 text-green-300'}">${s.balance > 0 ? 'Pending' : 'Paid'}</span>
+                                    </td>
+                                    <td class="px-4 md:px-6 py-4 text-center">
+                                        <button data-modal="recordPayment" data-index="${s.originalIndex}" class="action-btn btn-press bg-blue-600 hover:bg-blue-500 text-white font-bold py-1 px-3 rounded-lg text-xs">Record</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
                 
                 setTimeout(() => {
                     const searchInput = document.getElementById('feeSearch');
