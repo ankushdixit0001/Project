@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="data.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-effect { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -20,17 +21,13 @@
         .calendar-day { min-height: 6rem; }
         .event-dot { width: 6px; height: 6px; }
         .modal { transition: opacity 0.3s ease; }
-        /* Sidebar transition for mobile */
         @media (max-width: 768px) {
-            .sidebar {
-                transition: transform 0.3s ease-in-out;
-            }
+            .sidebar { transition: transform 0.3s ease-in-out; }
         }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
         <aside id="sidebar" class="sidebar absolute md:relative z-20 w-64 bg-gray-900 border-r border-gray-800 flex-shrink-0 transform -translate-x-full md:translate-x-0 md:flex flex-col">
             <div class="p-6 flex items-center space-x-3 border-b border-gray-800">
                 <svg class="h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><path d="M14 22v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v4"/><path d="M18 5v17"/><path d="M6 5v17"/><path d="M12 5v17"/></svg>
@@ -52,25 +49,20 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col">
-            <!-- Header for Main Content -->
             <header class="md:hidden flex justify-between items-center p-4 bg-gray-900 border-b border-gray-800">
                  <button id="menu-toggle" class="p-2 rounded-md hover:bg-gray-800">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
                 <h2 class="text-xl font-bold" id="header-title">Dashboard</h2>
-                <div class="w-8"></div> <!-- Spacer -->
-            </header>
+                <div class="w-8"></div> </header>
             <main id="main-content" class="flex-1 p-4 md:p-8 overflow-y-auto"></main>
         </div>
     </div>
 
-    <!-- Course Details Modal -->
     <div id="detailsModal" class="modal fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 hidden z-50">
         <div id="detailsModalContent" class="glass-effect rounded-xl p-6 md:p-8 w-full max-w-2xl">
-            <!-- Modal content will be injected here -->
-        </div>
+            </div>
     </div>
     
     <script>
@@ -82,10 +74,50 @@
             const sidebar = document.getElementById('sidebar');
             const menuToggle = document.getElementById('menu-toggle');
             const headerTitle = document.getElementById('header-title');
-            const sidebarNav = document.getElementById('sidebar-nav'); // FIX: Added this line
+            const sidebarNav = document.getElementById('sidebar-nav');
             
-            // --- MOCK DATA ---
-            const studentData = { name: "Priya Sharma", id: "DBC230567", avatarText: "PS", email: "priya.s@example.com", phone: "+91 9876543210", dob: "2004-05-15", address: "123 Civil Lines, Saharanpur" };
+            // --- GLOBAL DATE LOGIC ---
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth(); 
+            const currentDay = now.getDate();
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+            const monthName = now.toLocaleDateString('en-US', { month: 'long' });
+
+            // --- USER DATA LOGIC FROM DATA.JS ---
+            const loggedInName = localStorage.getItem('loggedInStudentName') || "Priya Singh"; // Fallback
+            const currentUser = GLOBAL_STUDENTS.find(s => s.name === loggedInName) || GLOBAL_STUDENTS[0];
+
+            // Map Data.js fields to this page's structure
+            const studentData = { 
+                name: currentUser.name, 
+                id: currentUser.id, 
+                avatarText: currentUser.name.charAt(0), 
+                email: currentUser.email, 
+                phone: currentUser.phone, 
+                dob: currentUser.dob, 
+                address: currentUser.address 
+            };
+
+            const financialsData = {
+                totalFees: currentUser.totalFees, 
+                scholarship: 0, // Assume 0 for simplicity or add to data.js
+                paid: currentUser.amountPaid, 
+                dueDate: 'Sep 15, 2025',
+                transactions: [
+                    { date: 'Aug 01, 2025', desc: 'Course Fee', amount: `+ ₹ ${currentUser.totalFees}`, type: 'debit' },
+                    { date: 'Aug 10, 2025', desc: 'Payment', amount: `- ₹ ${currentUser.amountPaid}`, type: 'credit' },
+                ]
+            };
+            
+            // Dynamic Events
+            const calendarEvents = [
+                { day: currentDay, title: 'Guest Lecture: AI', color: 'blue' },
+                { day: (currentDay + 4) > 28 ? 1 : currentDay + 4, title: 'Project Submission', color: 'red', nextMonth: (currentDay + 4) > 28 },
+                { day: 15, title: 'Fee Payment Due', color: 'yellow', nextMonth: false }
+            ];
+
             const coursesData = [
                 { id: 'CS-301', title: 'Data Structures & Algorithms', prof: 'Prof. Anjali Sharma', credits: 4, progress: 75, syllabus: ['Intro to Complexity', 'Arrays & Lists', 'Stacks & Queues', 'Trees & Graphs'], grades: [{name:'Quiz 1', score: '8/10'}, {name:'Mid-Term', score: '42/50'}, {name:'Assignment 1', score:'18/20'}] },
                 { id: 'MA-205', title: 'Advanced Calculus', prof: 'Prof. Rajesh Kumar', credits: 3, progress: 60, syllabus: ['Limits & Continuity', 'Derivatives', 'Integrals'], grades: [{name:'Quiz 1', score: '9/10'}, {name:'Mid-Term', score: '35/50'}] },
@@ -100,19 +132,7 @@
                 { course: 'PHY-110 Lab Report', grade: 'A', type: 'assignment' },
                 { course: 'HU-101 Presentation', grade: 'A+', type: 'assignment' },
             ];
-            const financialsData = {
-                totalFees: 75000, scholarship: 20000, paid: 40000, dueDate: 'Sep 15, 2025',
-                transactions: [
-                    { date: 'Aug 01, 2025', desc: 'Fall Semester Tuition', amount: '+ ₹ 75,000.00', type: 'debit' },
-                    { date: 'Aug 05, 2025', desc: 'Merit Scholarship', amount: '- ₹ 20,000.00', type: 'credit' },
-                    { date: 'Aug 10, 2025', desc: 'Online Payment', amount: '- ₹ 40,000.00', type: 'credit' },
-                ]
-            };
-            const calendarEvents = [
-                { day: 26, title: 'Guest Lecture: AI', color: 'blue' },
-                { day: 30, title: 'Project Submission', color: 'red' },
-                { day: 15, title: 'Fee Payment Due', color: 'yellow', nextMonth: true }
-            ];
+            
             const libraryData = [
                 { title: 'The Algorithm Design Manual', author: 'Steven S. Skiena', type: 'E-Book' },
                 { title: 'Journal of Computer Science', author: 'Vol. 18, Issue 4', type: 'Journal' },
@@ -122,7 +142,10 @@
             // --- RENDER FUNCTIONS ---
             const renderDashboard = () => `
                 <header class="flex justify-between items-center mb-8">
-                    <div><h2 class="text-2xl md:text-3xl font-bold">Welcome, ${studentData.name.split(' ')[0]}!</h2><p class="text-gray-400 text-sm md:text-base">Here's your academic snapshot for today, August 26, 2025.</p></div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold">Welcome, ${studentData.name.split(' ')[0]}!</h2>
+                        <p class="text-gray-400 text-sm md:text-base">Here's your academic snapshot for today, ${formattedDate}.</p>
+                    </div>
                     <div class="hidden md:flex items-center space-x-4 relative">
                         <button id="notification-btn" class="p-2 rounded-full hover:bg-gray-800 relative"><i data-lucide="bell" class="w-6 h-6 text-gray-300"></i><span class="absolute top-1 right-1.5 h-2 w-2 rounded-full bg-red-500"></span></button>
                         <div id="notification-dropdown" class="hidden absolute top-12 right-0 w-72 glass-effect rounded-xl p-4 text-sm z-10"><h4 class="font-semibold mb-2">Notifications</h4><div class="space-y-2">${notificationsData.map(n => `<div class="p-2 bg-gray-800 rounded-lg"><div>${n.text}</div><div class="text-xs text-gray-400 mt-1">${n.time}</div></div>`).join('')}</div></div>
@@ -180,17 +203,37 @@
             };
 
             const renderCalendar = () => {
-                const today = new Date('2025-08-26');
-                const month = today.getMonth();
-                const year = today.getFullYear();
-                const firstDay = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                let calendarHtml = `<h2 class="text-3xl font-bold mb-6">Calendar & Events - August 2025</h2><div class="glass-effect rounded-xl p-4"><div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-gray-400 mb-2">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<div>${d}</div>`).join('')}</div><div class="grid grid-cols-7 gap-2">`;
-                for (let i = 0; i < firstDay; i++) calendarHtml += `<div></div>`;
+                const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                let calendarHtml = `
+                <h2 class="text-3xl font-bold mb-6">Calendar & Events - ${monthName} ${currentYear}</h2>
+                <div class="glass-effect rounded-xl p-4">
+                    <div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-gray-400 mb-2">
+                        ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => `<div>${d}</div>`).join('')}
+                    </div>
+                    <div class="grid grid-cols-7 gap-2">`;
+                
+                for (let i = 0; i < firstDayOfMonth; i++) {
+                    calendarHtml += `<div></div>`;
+                }
+
                 for (let day = 1; day <= daysInMonth; day++) {
-                    const isToday = day === today.getDate() ? 'bg-blue-600 text-white' : 'bg-gray-800';
+                    const isToday = (day === currentDay) ? 'bg-blue-600 text-white' : 'bg-gray-800';
                     const eventsOnDay = calendarEvents.filter(e => e.day === day && !e.nextMonth);
-                    calendarHtml += `<div class="calendar-day rounded-lg p-2 ${isToday}"><div class="font-semibold">${day}</div><div class="mt-1 space-y-1">${eventsOnDay.map(e => `<div class="flex items-center text-xs"><div class="event-dot bg-${e.color}-400 rounded-full mr-1.5"></div>${e.title}</div>`).join('')}</div></div>`;
+                    
+                    calendarHtml += `
+                    <div class="calendar-day rounded-lg p-2 ${isToday}">
+                        <div class="font-semibold">${day}</div>
+                        <div class="mt-1 space-y-1">
+                            ${eventsOnDay.map(e => `
+                                <div class="flex items-center text-xs">
+                                    <div class="event-dot bg-${e.color}-400 rounded-full mr-1.5"></div>
+                                    <span class="truncate">${e.title}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
                 }
                 calendarHtml += `</div></div>`;
                 return calendarHtml;
@@ -232,13 +275,11 @@
                 navLinks.forEach(link => {
                     link.classList.toggle('active', link.id === id);
                 });
-                // Close sidebar on navigation in mobile view
                 if (window.innerWidth < 768) {
                     sidebar.classList.add('-translate-x-full');
                 }
             };
             
-            // --- EVENT LISTENERS ---
             mainContent.addEventListener('click', (e) => {
                 const link = e.target.closest('.nav-link');
                 const button = e.target.closest('.action-btn');
@@ -267,7 +308,6 @@
                 sidebar.classList.toggle('-translate-x-full');
             });
             
-            // Initial load
             navigate('nav-dashboard');
         });
         lucide.createIcons();
