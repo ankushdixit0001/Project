@@ -1,7 +1,6 @@
 /**
  * Main script for the Disha Bharti College website.
- * Handles single-page navigation, animations, form submissions, and theme syncing.
- * This script should be loaded at the end of the <body> tag.
+ * Handles scrolling navigation (ScrollSpy), animations, form submissions, and theme syncing.
  */
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -11,56 +10,47 @@ document.addEventListener('DOMContentLoaded', () => {
         preloader.style.opacity = '0';
         setTimeout(() => {
             preloader.style.display = 'none';
-        }, 500); // Matches the transition duration in the CSS.
+        }, 500);
     });
 
-    // --- Single-Page Application (SPA) Navigation Logic ---
-    const pages = document.querySelectorAll('.page');
-    
-    /**
-     * Manages page visibility for the SPA functionality.
-     * Hides all pages and then displays the one with the specified ID.
-     * Also updates the active state of the navigation links.
-     * @param {string} pageId The ID of the page section to display (e.g., 'about', 'contact').
-     */
-    function showPage(pageId) {
-        pages.forEach(page => {
-            page.classList.add('hidden');
-        });
-        const activePage = document.getElementById(pageId);
-        if (activePage) {
-            activePage.classList.remove('hidden');
-        }
-        
-        const targetHref = `#${pageId}`;
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.toggle('active-link', link.getAttribute('href') === targetHref);
-        });
-        
-        window.scrollTo(0, 0);
-    }
-    
-    /**
-     * Event handler for clicks on any link that starts with '#'.
-     * Prevents the default anchor jump and uses the showPage function instead.
-     * @param {Event} e The click event object.
-     */
-    function handleNavClick(e) {
-        const href = this.getAttribute('href');
-        if (href.startsWith('#') && href.length > 1) {
-            e.preventDefault();
-            const pageId = href.substring(1);
-            showPage(pageId);
-            if (!mobileMenu.classList.contains('hidden')) {
-                toggleMobileMenu();
-            }
-        }
-    }
+    // --- SCROLL SPY & NAVIGATION LOGIC ---
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
 
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= (sectionTop - 150)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active-link');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active-link');
+            }
+        });
+    });
+
+    // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        if(anchor.id !== 'back-to-top') {
-            anchor.addEventListener('click', handleNavClick);
-        }
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+
+            if (targetSection) {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
     });
 
     // --- Mobile Menu Toggle ---
@@ -71,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     mobileMenuButton.addEventListener('click', toggleMobileMenu);
 
-    // --- Form Submission Handling (Mock) ---
+    // --- Form Handling ---
     const infoForm = document.getElementById('info-form');
-    if(infoForm) {
-        infoForm.addEventListener('submit', function(e) {
+    if (infoForm) {
+        infoForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const feedback = document.getElementById('form-feedback');
             feedback.innerHTML = '<p class="text-green-600 font-semibold">Thank you! Your inquiry has been submitted successfully.</p>';
@@ -82,10 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => { feedback.innerHTML = ''; }, 5000);
         });
     }
-    
+
     const contactForm = document.getElementById('contact-form');
-    if(contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const feedback = document.getElementById('contact-feedback');
             feedback.innerHTML = '<p class="text-green-600 font-semibold">Thank you for your message. We will get back to you shortly.</p>';
@@ -94,38 +84,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Image Carousel Logic ---
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    
-    if (slides.length > 0) {
-        slides.forEach((_, i) => {
+    // ==========================================
+    // CAROUSEL 1: GLIMPSES (Original Images)
+    // ==========================================
+    const glimpseSlides = document.querySelectorAll('.carousel-slide');
+    const glimpseDotsContainer = document.querySelector('.carousel-dots');
+    let currentGlimpseSlide = 0;
+
+    if (glimpseSlides.length > 0) {
+        // Create Dots
+        glimpseSlides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.classList.add('carousel-dot');
             if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
+            dot.addEventListener('click', () => goToGlimpseSlide(i));
+            glimpseDotsContainer.appendChild(dot);
         });
-        
-        const dots = document.querySelectorAll('.carousel-dot');
 
-        function goToSlide(n) {
-            if (!slides[currentSlide] || !dots[currentSlide]) return;
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active');
-            currentSlide = (n + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
+        const glimpseDots = document.querySelectorAll('.carousel-dot');
+
+        function goToGlimpseSlide(n) {
+            glimpseSlides[currentGlimpseSlide].classList.remove('active');
+            glimpseDots[currentGlimpseSlide].classList.remove('active');
+            currentGlimpseSlide = (n + glimpseSlides.length) % glimpseSlides.length;
+            glimpseSlides[currentGlimpseSlide].classList.add('active');
+            glimpseDots[currentGlimpseSlide].classList.add('active');
         }
-
-        setInterval(() => goToSlide(currentSlide + 1), 5000);
+        setInterval(() => goToGlimpseSlide(currentGlimpseSlide + 1), 4000); // 4 seconds
     }
 
-    // --- Scroll-based Animations & Back to Top Button ---
+    // ==========================================
+    // CAROUSEL 2: TESTIMONIALS (New Student Reviews)
+    // ==========================================
+    const testSlides = document.querySelectorAll('.testimonial-slide');
+    const testDotsContainer = document.querySelector('.testimonial-dots');
+    let currentTestSlide = 0;
+
+    if (testSlides.length > 0) {
+        // Create Dots for Testimonials
+        testSlides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('testimonial-dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToTestSlide(i));
+            testDotsContainer.appendChild(dot);
+        });
+
+        const testDots = document.querySelectorAll('.testimonial-dot');
+
+        function goToTestSlide(n) {
+            testSlides[currentTestSlide].classList.remove('active');
+            testDots[currentTestSlide].classList.remove('active');
+            currentTestSlide = (n + testSlides.length) % testSlides.length;
+            testSlides[currentTestSlide].classList.add('active');
+            testDots[currentTestSlide].classList.add('active');
+        }
+
+        // Slower rotation for reading text (6 seconds)
+        setInterval(() => goToTestSlide(currentTestSlide + 1), 6000);
+    }
+
+    // --- Scroll Animations & Back to Top ---
     const header = document.getElementById('main-header');
     const backToTopButton = document.getElementById('back-to-top');
-    
+
     const scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -136,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.fade-in-up').forEach(el => scrollObserver.observe(el));
 
-    window.onscroll = function() {
+    window.addEventListener('scroll', function () {
         if (window.scrollY > 50) {
             header.classList.add('header-scrolled');
         } else {
@@ -148,8 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             backToTopButton.classList.remove('show');
         }
-    };
-    
+    });
+
     // --- FAQ Accordion ---
     document.querySelectorAll('.faq-question').forEach(button => {
         button.addEventListener('click', () => {
@@ -160,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Lazy Loading for Gallery Images ---
+    // --- Lazy Loading ---
     const lazyImages = document.querySelectorAll('img.lazy');
     const lazyImageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
@@ -172,14 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
     lazyImages.forEach(lazyImage => lazyImageObserver.observe(lazyImage));
 
     // --- System Theme Sync ---
     function updateTheme(isDarkMode) {
         document.documentElement.classList.toggle('dark', isDarkMode);
     }
-
     const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     updateTheme(darkModeMediaQuery.matches);
     darkModeMediaQuery.addEventListener('change', (e) => {

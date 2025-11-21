@@ -21,7 +21,8 @@ body {
     bottom: -4px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #3b82f6; /* blue-600 */
+    background-color: #3b82f6;
+    /* blue-600 */
     transition: width 0.3s ease-in-out;
 }
 
@@ -31,7 +32,8 @@ body {
 }
 
 .active-link {
-    color: #3b82f6; /* blue-600 */
+    color: #3b82f6;
+    /* blue-600 */
     font-weight: 600;
 }
 
@@ -43,7 +45,8 @@ body {
 }
 
 .dark .header-scrolled {
-     background-color: rgba(17, 24, 39, 0.9); /* dark:bg-gray-900 with opacity */
+    background-color: rgba(17, 24, 39, 0.9);
+    /* dark:bg-gray-900 with opacity */
 }
 
 /* Hero Section Background */
@@ -123,9 +126,12 @@ body {
 }
 
 #back-to-top.show {
-    display: flex; /* Changed to flex for centering */
-    align-items: center; /* Vertically center */
-    justify-content: center; /* Horizontally center */
+    display: flex;
+    /* Changed to flex for centering */
+    align-items: center;
+    /* Vertically center */
+    justify-content: center;
+    /* Horizontally center */
     opacity: 1;
     transform: translateY(0);
 }
@@ -146,7 +152,8 @@ body {
 }
 
 .dark #preloader {
-    background-color: #111827; /* dark:bg-gray-900 */
+    background-color: #111827;
+    /* dark:bg-gray-900 */
 }
 
 .spinner {
@@ -154,13 +161,19 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border-left-color: #3b82f6; /* blue-600 */
+    border-left-color: #3b82f6;
+    /* blue-600 */
     animation: spin 1s ease infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Button Press Effect */
@@ -170,4 +183,59 @@ body {
 
 .btn-press:active {
     transform: scale(0.98);
+}
+
+
+/* --- Testimonial Carousel Styling --- */
+.testimonial-container {
+    position: relative;
+    overflow: hidden;
+    max-width: 800px;
+    /* Limits width for better readability */
+    margin: 0 auto;
+    /* Centers the carousel */
+}
+
+.testimonial-slide {
+    display: none;
+    /* Hidden by default */
+    animation: fadeIn 1s ease-in-out;
+}
+
+.testimonial-slide.active {
+    display: block;
+    /* Show only the active one */
+}
+
+/* Dots for Testimonials */
+.testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.testimonial-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #cbd5e1;
+    /* Gray-300 */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.testimonial-dot.active {
+    background-color: #3b82f6;
+    /* Blue-600 to match theme */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

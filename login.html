@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +11,68 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="data.js"></script> 
+    <script src="data.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass-effect { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .active-tab { background-color: #2563eb; color: white; }
-        .inactive-tab { background-color: transparent; color: #9ca3af; }
-        .form-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 15% 50%, rgba(49, 130, 206, 0.2), transparent 40%), radial-gradient(circle at 85% 30%, rgba(127, 29, 29, 0.15), transparent 40%); z-index: 1; opacity: 0.5; pointer-events: none; }
-        .form-content { position: relative; z-index: 2; }
-        .spinner { animation: spin 1s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .active-tab {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .inactive-tab {
+            background-color: transparent;
+            color: #9ca3af;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at 15% 50%, rgba(49, 130, 206, 0.2), transparent 40%), radial-gradient(circle at 85% 30%, rgba(127, 29, 29, 0.15), transparent 40%);
+            z-index: 1;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .form-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
+
 <body class="bg-gray-900 text-white">
 
     <div class="min-h-screen flex items-center justify-center p-4 form-container overflow-hidden">
         <div class="grid md:grid-cols-2 max-w-6xl w-full rounded-2xl shadow-2xl overflow-hidden glass-effect">
-            
+
             <div class="hidden md:block p-12 bg-black bg-opacity-20">
                 <div class="flex flex-col h-full">
                     <div class="flex items-center space-x-3">
@@ -37,10 +83,22 @@
                     <div class="mt-12">
                         <h2 class="text-xl font-semibold text-blue-300">Portal Features</h2>
                         <ul class="mt-6 space-y-5 text-gray-300">
-                            <li class="flex items-start"><i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Academic Records:</strong> View grades, transcripts, and GPA tracking.</span></li>
-                            <li class="flex items-start"><i data-lucide="book-marked" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Course Management:</strong> Register for courses and access materials.</span></li>
-                            <li class="flex items-start"><i data-lucide="dollar-sign" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Financial Hub:</strong> Pay tuition fees and manage scholarships.</span></li>
-                            <li class="flex items-start"><i data-lucide="calendar-days" class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong class="text-white">Campus Events:</strong> Stay updated with university events.</span></li>
+                            <li class="flex items-start"><i data-lucide="check-circle"
+                                    class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong
+                                        class="text-white">Academic Records:</strong> View grades, transcripts, and GPA
+                                    tracking.</span></li>
+                            <li class="flex items-start"><i data-lucide="book-marked"
+                                    class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong
+                                        class="text-white">Course Management:</strong> Register for courses and access
+                                    materials.</span></li>
+                            <li class="flex items-start"><i data-lucide="dollar-sign"
+                                    class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong
+                                        class="text-white">Financial Hub:</strong> Pay tuition fees and manage
+                                    scholarships.</span></li>
+                            <li class="flex items-start"><i data-lucide="calendar-days"
+                                    class="w-5 h-5 text-green-400 mr-3 mt-1 flex-shrink-0"></i><span><strong
+                                        class="text-white">Campus Events:</strong> Stay updated with university
+                                    events.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -49,11 +107,15 @@
             <div class="p-8 md:p-12 bg-gray-900 bg-opacity-50 form-content">
                 <div class="mb-8">
                     <div class="flex border border-gray-700 rounded-lg p-1">
-                        <button id="student-tab" class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Student Portal</button>
-                        <button id="admin-tab" class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Admin Panel</button>
+                        <button id="student-tab"
+                            class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Student
+                            Portal</button>
+                        <button id="admin-tab"
+                            class="w-1/2 p-2 rounded-md text-sm font-medium transition-all duration-300">Admin
+                            Panel</button>
                     </div>
                 </div>
-                
+
                 <h2 id="form-title" class="text-3xl font-bold mb-2 text-white">Student Login</h2>
                 <p class="text-gray-400 mb-8">Welcome back! Please enter your credentials.</p>
 
@@ -61,28 +123,34 @@
                     <div>
                         <label for="user-id" class="block text-sm font-medium text-gray-300">Student Name / ID</label>
                         <div class="mt-2 relative">
-                            <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                            <input id="user-id" type="text" autocomplete="username" required class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                            <i data-lucide="user"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input id="user-id" type="text" autocomplete="username" required
+                                class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
                         </div>
                     </div>
                     <div>
                         <div class="flex items-center justify-between">
                             <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-                            <a href="#" class="text-sm font-semibold text-blue-400 hover:text-blue-300">Forgot password?</a>
+                            <a href="#" class="text-sm font-semibold text-blue-400 hover:text-blue-300">Forgot
+                                password?</a>
                         </div>
                         <div class="mt-2 relative">
-                             <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                            <input id="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                            <i data-lucide="lock"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                            <input id="password" type="password" autocomplete="current-password" required
+                                class="block w-full rounded-md border-0 py-3 pl-10 bg-gray-800 text-white ring-1 ring-inset ring-gray-700 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500">
                         </div>
                     </div>
-                    
+
                     <div id="error-message" class="hidden text-sm text-red-400 flex items-center">
                         <i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>
                         <span>Invalid credentials. Use 'Name' and 'Name@123'.</span>
                     </div>
 
                     <div>
-                        <button id="login-button" type="submit" class="flex w-full justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all duration-300 transform hover:scale-105">
+                        <button id="login-button" type="submit"
+                            class="flex w-full justify-center items-center rounded-md bg-blue-600 px-3 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-all duration-300 transform hover:scale-105">
                             <span id="button-text">Sign In</span>
                             <i id="button-spinner" data-lucide="loader" class="w-5 h-5 ml-2 hidden spinner"></i>
                         </button>
@@ -107,7 +175,7 @@
         const buttonSpinner = document.getElementById('button-spinner');
 
         function setActiveTab(tab) {
-            errorMessage.classList.add('hidden'); 
+            errorMessage.classList.add('hidden');
             if (tab === 'student') {
                 studentTab.classList.add('active-tab');
                 studentTab.classList.remove('inactive-tab');
@@ -148,7 +216,7 @@
                 if (isStudentLogin) {
                     // Search in GLOBAL_STUDENTS from data.js
                     const foundStudent = GLOBAL_STUDENTS.find(s => s.name.toLowerCase() === inputName.toLowerCase());
-                    
+
                     // Check Password: Name@123
                     if (foundStudent && inputPass === `${foundStudent.name}@123`) {
                         isAuthenticated = true;
@@ -177,4 +245,5 @@
         setActiveTab('student');
     </script>
 </body>
+
 </html>
